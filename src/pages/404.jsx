@@ -2,9 +2,9 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { colors } from "../variables";
 
-const Error = styled.div`
+const Error = styled.main`
 text-align: center;
-margin: 100px auto ;
+// margin: 100px auto ;
 padding: 40px;
 h1 {    
     font-size: 6rem;
@@ -35,7 +35,7 @@ a {
 
 function NotFound() {
   return (
-    <Error>
+    <Error className="main">
       <h1>404</h1>
       <p>Quelque chose s&apos;est mal passé ... Revenez plus tard.</p>
       <Link to="/"> Retour page d&apos;accueil</Link>

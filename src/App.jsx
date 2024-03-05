@@ -1,11 +1,11 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import RootLayout from "./layout/RootLayout";
-import SignIn from "./pages/SignIn";
 import NotFound from "./pages/404";
-// import { Provider } from "react-redux";
+import { Provider } from "react-redux";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
-// import { store } from "./redux/store";
+import Signin from "./pages/SignIn";
+import { store } from "./redux/store";
 
 const router = createBrowserRouter([
   {
@@ -18,8 +18,8 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        index: "/sign-in",
-        element: <SignIn />,
+        path: "sign-in",
+        element: <Signin />,
       },
       {
         path: "profile",
@@ -39,9 +39,9 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    // <Provider store={store}>
-    <RouterProvider router={router} />
-    // </Provider>
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   );
 }
 

@@ -16,6 +16,9 @@ const userSlice = createSlice({
       };
       return state;
     },
+    clearUserInfos: () => {
+      return {};
+    },
   },
 });
 
@@ -23,4 +26,4 @@ export const store = configureStore({
   reducer: { user: userSlice.reducer },
 });
 
-export const { updateUser, addToken } = userSlice.actions;
+export const { updateUser, addToken, clearUserInfos } = userSlice.actions;

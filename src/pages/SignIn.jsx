@@ -7,20 +7,19 @@ import { useNavigate } from "react-router-dom";
 import { setItemStorage } from "./../utils/modules";
 
 const Signin = () => {
-  const [isChecked, setIsChecked] = useState(false);
-  const [userName, setUserName] = useState("");
-  const [password, setPassword] = useState("");
-  // const [formData, setFormData] = useState({
-  //   userName: "",
-  //   password: "",
-  //   isChecked: false,
-  // });
+  const [isIdentifiersOk, setIsIdentifiersOk] = useState(true);
+  const [formData, setFormData] = useState({
+    userName: "",
+    password: "",
+    isChecked: false,
+  });
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleCheckBox = (e) => {
-    setIsChecked(e.target.checked);
+    setFormData({ ...formData, isChecked: e.target.checked });
   };
+
   const handleSubmit = (e) => {
     const LOGIN_URL = `${import.meta.env.VITE_BASE_URL}/login`;
     e.preventDefault();
@@ -32,19 +31,27 @@ const Signin = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ email: userName, password: password }),
+          body: JSON.stringify({
+            ...formData,
+            email: formData.userName,
+            password: formData.password,
+          }),
         });
 
-        if (!res.ok) return console.log("🚀 ~ !res.ok:", res.ok);
+        if (!res.ok) {
+          setIsIdentifiersOk(false);
+          console.log("🚀 ~ !res.ok:", res.ok);
+          return;
+        }
 
         const data = await res.json();
 
         dispatch(addToken(data.body.token));
 
-        if (isChecked) {
+        if (formData.isChecked) {
           setItemStorage(data.body.token);
         }
-        if (!isChecked) {
+        if (!formData.isChecked) {
           setItemStorage("");
         }
 
@@ -62,31 +69,44 @@ const Signin = () => {
 
         <h1>Sign In</h1>
         <form onSubmit={handleSubmit}>
-          <div className="input-wrapper">
+          <div
+            className={
+              isIdentifiersOk ? "input-wrapper" : "input-wrapper warning"
+            }>
             <label htmlFor="username">Username</label>
             <input
               required
               type="email"
               id="username"
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
+              value={formData.userName}
+              onChange={(e) =>
+                setFormData({ ...formData, userName: e.target.value })
+              }
             />
           </div>
-          <div className="input-wrapper">
+          <div
+            className={
+              isIdentifiersOk ? "input-wrapper" : "input-wrapper warning"
+            }>
             <label htmlFor="password">Password</label>
             <input
               required
               type="password"
               id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={formData.password}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
             />
+            <p className="warning-logs-msg">
+              {isIdentifiersOk ? "" : "Wrong IDs"}
+            </p>
           </div>
           <div className="input-remember">
             <input
               type="checkbox"
               id="remember-me"
-              value={isChecked}
+              value={formData.isChecked}
               onChange={handleCheckBox}
             />
             <label htmlFor="remember-me">Remember me</label>

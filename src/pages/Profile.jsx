@@ -1,16 +1,16 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { updateUser } from "../redux/store";
 import { addToken } from "../redux/store";
+import styles from "./../sass/profile.module.scss";
 
 const Profile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const PROFILE_URL = `${import.meta.env.VITE_BASE_URL}/profile/`;
   const userData = useSelector((state) => state.user);
-
-  console.log("🚀 ~ userData:", userData);
+  const [displayEditForm, setDisplayEditForm] = useState(false);
 
   useEffect(() => {
     const userToken = JSON.parse(localStorage.getItem("userToken"));
@@ -30,7 +30,7 @@ const Profile = () => {
           });
 
           if (!res.ok) {
-            console.log("🚀 ~ !res.OK??:", res);
+            console.log("🚀 ~ !res.OK:", res);
             return navigate("/sign-in");
           }
 
@@ -53,7 +53,27 @@ const Profile = () => {
           <br />
           {userData.firstName} {userData.lastName} !
         </h1>
-        <button className="edit-button">Edit Name</button>
+        {displayEditForm ? (
+          <form>
+            <div className="">
+              <div className="">
+                <label htmlFor="firstName"></label>
+                <input
+                  type="text"
+                  id="firstName"
+                  placeholder={userData.firstName}
+                />
+              </div>
+              <div className=""></div>
+            </div>
+          </form>
+        ) : (
+          <button
+            className="edit-button"
+            onClick={() => setDisplayEditForm(true)}>
+            Edit Name
+          </button>
+        )}
       </div>
       <h2 className="sr-only">Accounts</h2>
       <section className="account">

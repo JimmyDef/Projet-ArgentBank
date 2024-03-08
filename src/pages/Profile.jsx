@@ -3,7 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { updateUser } from "../redux/store";
 import { addToken } from "../redux/store";
-import styles from "./../sass/profile.module.scss";
+// import styles from "./../sass/profile.module.scss";
+import UserInfoForm from "./../components/UserInfoForm";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -54,19 +55,10 @@ const Profile = () => {
           {userData.firstName} {userData.lastName} !
         </h1>
         {displayEditForm ? (
-          <form>
-            <div className="">
-              <div className="">
-                <label htmlFor="firstName"></label>
-                <input
-                  type="text"
-                  id="firstName"
-                  placeholder={userData.firstName}
-                />
-              </div>
-              <div className=""></div>
-            </div>
-          </form>
+          <UserInfoForm
+            displayEditForm={displayEditForm}
+            setDisplayEditForm={setDisplayEditForm}
+          />
         ) : (
           <button
             className="edit-button"

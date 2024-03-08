@@ -40,7 +40,7 @@ const Signin = () => {
 
         if (!res.ok) {
           setIsIdentifiersOk(false);
-          console.log("🚀 ~ !res.ok:", res.ok);
+          console.log("🚀 ~ !res.ok non-authentifié:", res.status, res.ok);
           return;
         }
 

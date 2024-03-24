@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { colors } from "../variables";
 
 const Error = styled.main`
 text-align: center;
@@ -10,7 +9,7 @@ h1 {
     font-size: 6rem;
     font-weight: 700;
     margin-bottom: 20px;
-    color: ${colors.primary};
+    color: #42b983;
     }
 p {
   font-size: 1.5rem;
@@ -19,16 +18,16 @@ p {
  
 }
 a {
-    color: ${colors.color2};
-    background-color: ${colors.color1};
+    color: white;
+    background-color: black;
     padding: 10px 20px;
     border-radius: 5px;
     text-decoration: none;
     font-weight: 500;
     transition: all 0.3s ease;
     &:hover {
-        background-color: ${colors.primary};
-         color: ${colors.color};
+        background-color: #42b983;
+        
     }
     }
 `;

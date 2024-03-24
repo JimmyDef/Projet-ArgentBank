@@ -296,12 +296,29 @@ span {
   flex: 1;
 }
 
+.edit-button-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  align-items: center;
+}
 .edit-button {
-  border-color: #00bc77;
-  background-color: #00bc77;
-  color: #fff;
+  /* border-color: #00bc77; */
+  background-color: white;
+  color: #00bc77;
   font-weight: bold;
-  padding: 10px;
+  padding: 7px 10px;
+  width: 100px;
+  border-radius: 5px;
+  transition: all 250ms;
+}
+.edit-button:hover {
+  /* border-color: #00bc77; */
+  background-color: #00bc77;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 .header {
@@ -336,6 +353,13 @@ span {
 }
 
 @media (min-width: 520px) {
+  .edit-button {
+    padding: 10px;
+  }
+  .edit-button-wrapper {
+    flex-direction: row;
+    gap: 20px;
+  }
   .span-hidden {
     display: inline;
   }
@@ -352,5 +376,46 @@ span {
   }
   .nav-icon.sign-in:hover {
     transform: scale(1);
+  }
+}
+
+.form-edit-user-infos .input-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  /* margin: 0 auto; */
+}
+.form-edit-user-infos .input-wrapper input {
+  border-radius: 5px;
+  width: 170px;
+  height: 20px;
+  padding: 5px 0 5px 10px;
+  border: 2px solid white;
+}
+.form-edit-user-infos .input-wrapper input:hover {
+  border: #00bc77 2px solid;
+}
+.form-edit-user-infos .input-wrapper input:focus {
+  border: #00bc77 3px solid;
+  outline: none;
+}
+
+.inputErrorMsg {
+  color: red;
+}
+
+@media (min-width: 520px) {
+  .form-edit-user-infos .input-wrapper {
+    flex-direction: row;
+
+    gap: 20px;
+  }
+  .form-edit-user-infos .input-wrapper input {
+    border-radius: 5px;
+    width: 200px;
+    height: 30px;
+    padding: 5px 0 5px 30px;
   }
 }

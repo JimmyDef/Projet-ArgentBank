@@ -4,13 +4,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateUser } from "../redux/store";
 import PropTypes from "prop-types";
 
-import styles from "./../sass/profile.module.scss";
-
 const UserInfoForm = ({ setDisplayEditForm }) => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [inputErrorMsg, setinputErrorMsg] = useState(false);
 
   const cancelModification = (e) => {
     e.preventDefault();
@@ -52,6 +51,7 @@ const UserInfoForm = ({ setDisplayEditForm }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!firstName || !lastName) {
+      setinputErrorMsg(true);
       return;
     }
     console.log("🚀 ~ updateUserProfile:");
@@ -59,8 +59,8 @@ const UserInfoForm = ({ setDisplayEditForm }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="">
+    <form onSubmit={handleSubmit} className="form-edit-user-infos">
+      <div className="input-wrapper">
         <div className="">
           <label htmlFor="firstName"></label>
           <input
@@ -81,13 +81,16 @@ const UserInfoForm = ({ setDisplayEditForm }) => {
             onChange={(e) => setLastName(e.target.value)}
           />
         </div>
-        <div className="">
-          <button className="edit-button">Save</button>
-          <button className="edit-button" onClick={cancelModification}>
-            Cancel
-          </button>
-        </div>
       </div>
+      <div className="edit-button-wrapper">
+        <button className="edit-button">Save</button>
+        <button className="edit-button" onClick={cancelModification}>
+          Cancel
+        </button>
+      </div>
+      <p className="inputErrorMsg">
+        {inputErrorMsg ? "Please fill in the fields." : " "}
+      </p>
     </form>
   );
 };

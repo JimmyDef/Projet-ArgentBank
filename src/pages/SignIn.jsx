@@ -5,9 +5,10 @@ import { useDispatch } from "react-redux";
 import { addToken } from "../redux/store";
 import { useNavigate } from "react-router-dom";
 import { setItemStorage } from "./../utils/modules";
-
+import Loader from "../components/loader/Loader";
 const Signin = () => {
   const [isIdentifiersOk, setIsIdentifiersOk] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     userName: "",
     password: "",
@@ -25,6 +26,7 @@ const Signin = () => {
     e.preventDefault();
 
     const handleSignIn = async () => {
+      setIsLoading(true);
       try {
         const res = await fetch(LOGIN_URL, {
           method: "post",
@@ -57,7 +59,10 @@ const Signin = () => {
 
         navigate("/profile");
       } catch (error) {
+        navigate("/not-found");
         console.log("🚀 ~ error POST SignIn:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
     handleSignIn();
@@ -112,7 +117,9 @@ const Signin = () => {
             <label htmlFor="remember-me">Remember me</label>
           </div>
 
-          <button className="sign-in-button">Sign In</button>
+          <button className="sign-in-button">
+            {!isLoading ? "Sign In" : <Loader />}
+          </button>
         </form>
       </section>
     </main>

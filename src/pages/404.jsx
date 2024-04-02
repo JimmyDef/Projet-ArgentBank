@@ -18,9 +18,10 @@ p {
  
 }
 a {
+  display: inline-block;
     color: white;
     background-color: black;
-    padding: 10px 20px;
+    padding: 8px 16px;
     border-radius: 5px;
     text-decoration: none;
     font-weight: 500;
@@ -28,6 +29,10 @@ a {
     &:hover {
         background-color: #42b983;
         
+    }
+     @media (min-width: 350px) {
+        padding: 10px 20px; 
+        font-size: 1.3rem; 
     }
     }
 `;
@@ -37,7 +42,7 @@ function NotFound() {
     <Error className="main">
       <h1>404</h1>
       <p>Quelque chose s&apos;est mal passé ... Revenez plus tard.</p>
-      <Link to="/"> Retour page d&apos;accueil</Link>
+      <Link to="/">Retour page d&apos;accueil</Link>
     </Error>
   );
 }

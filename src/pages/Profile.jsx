@@ -23,6 +23,7 @@ const Profile = () => {
     if (userData.token) {
       const fetchProfileData = async () => {
         try {
+          console.log(`Bearer ${userData.token}`);
           const res = await fetch(PROFILE_URL, {
             method: "post",
             headers: {

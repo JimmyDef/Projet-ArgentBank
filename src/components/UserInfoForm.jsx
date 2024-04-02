@@ -7,14 +7,19 @@ import PropTypes from "prop-types";
 const UserInfoForm = ({ setDisplayEditForm }) => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [inputErrorMsg, setinputErrorMsg] = useState(false);
+  // const [firstName, setFirstName] = useState("");
+  // const [firstNameError, setFirstNameError] = useState(false);
+  // const [lastName, setLastName] = useState("");
+  // const [lastNameError, setLastNameError] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    errors: { firstName: false, lastName: false },
+  });
 
   const cancelModification = (e) => {
     e.preventDefault();
-    setFirstName("");
-    setLastName("");
+    setFormData({ ...formData, firstName: "", lastName: "" });
     setDisplayEditForm(false);
   };
 
@@ -28,8 +33,8 @@ const UserInfoForm = ({ setDisplayEditForm }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          firstName: firstName,
-          lastName: lastName,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
         }),
       });
       if (!res.ok) {
@@ -39,9 +44,15 @@ const UserInfoForm = ({ setDisplayEditForm }) => {
       const response = await res.json();
       console.log("🚀 ~ update OK:", response);
 
-      dispatch(updateUser({ firstName: firstName, lastName: lastName }));
-      setFirstName("");
-      setLastName("");
+      dispatch(
+        updateUser({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+        })
+      );
+
+      setFormData({ ...formData, firstName: "", lastName: "" });
+
       setDisplayEditForm(false);
     } catch (error) {
       console.log("🚀 ~ error:", error);
@@ -50,12 +61,20 @@ const UserInfoForm = ({ setDisplayEditForm }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!firstName || !lastName) {
-      setinputErrorMsg(true);
-      return;
-    }
-    console.log("🚀 ~ updateUserProfile:");
-    updateUserProfile();
+    const errors = {};
+
+    if (!formData.firstName) errors.firstName = true;
+    if (!formData.lastName) errors.lastName = true;
+    setFormData({ ...formData, errors: errors });
+    console.log(formData);
+    if (Object.keys(errors).length === 0) updateUserProfile();
+  };
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value,
+    });
   };
 
   return (
@@ -64,33 +83,43 @@ const UserInfoForm = ({ setDisplayEditForm }) => {
         <div className="">
           <label htmlFor="firstName"></label>
           <input
+            className={` input-user-info  ${
+              formData.errors.firstName ? "input-error" : ""
+            }`}
             type="text"
             id="firstName"
             placeholder={userData.firstName}
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
+            value={formData.firstName}
+            onChange={handleChange}
           />
         </div>
         <div className="">
           <label htmlFor="lastName"></label>
           <input
+            className={` input-user-info  ${
+              formData.errors.lastName ? "input-error" : ""
+            }`}
             type="text"
             id="lastName"
             placeholder={userData.lastName}
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
+            value={formData.lastName}
+            onChange={handleChange}
           />
         </div>
       </div>
+      <p className="inputErrorMsg">
+        {Object.values(formData.errors).includes(true)
+          ? "Please fill in empty fields."
+          : " "}
+      </p>
       <div className="edit-button-wrapper">
-        <button className="edit-button">Save</button>
+        <button className="edit-button" onClick={handleSubmit}>
+          Save
+        </button>
         <button className="edit-button" onClick={cancelModification}>
           Cancel
         </button>
       </div>
-      <p className="inputErrorMsg">
-        {inputErrorMsg ? "Please fill in the fields." : " "}
-      </p>
     </form>
   );
 };

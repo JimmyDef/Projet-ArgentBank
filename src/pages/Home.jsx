@@ -1,44 +1,8 @@
-import { useEffect } from "react";
 import iconChat from "./../assets/img/icon-chat.png";
 import iconMoney from "./../assets/img/icon-money.png";
 import iconSecurity from "./../assets/img/icon-security.png";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { updateUser, addToken } from "../redux/store";
 
 const Home = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const PROFILE_URL = `${import.meta.env.VITE_BASE_URL}/profile/`;
-
-  useEffect(() => {
-    const userToken = JSON.parse(localStorage.getItem("userToken"));
-
-    if (userToken) {
-      const fetchProfileData = async () => {
-        try {
-          const res = await fetch(PROFILE_URL, {
-            method: "post",
-            headers: {
-              authorization: `Bearer ${userToken}`,
-            },
-          });
-
-          if (!res.ok) return console.log("🚀 ~ !res.OK:", res);
-
-          const data = await res.json();
-          dispatch(updateUser(data.body));
-          dispatch(addToken(userToken));
-          navigate("/profile");
-        } catch (error) {
-          console.log("🚀 ~ error fetch POST:", error);
-        }
-      };
-
-      fetchProfileData();
-    }
-  }, [dispatch, navigate, PROFILE_URL]);
-
   return (
     <main className="main">
       <div className="hero">

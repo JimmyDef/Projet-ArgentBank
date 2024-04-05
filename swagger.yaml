@@ -1,0 +1,235 @@
+openapi: 3.1.0
+info:
+  title: Bank Argent transactions API documentation
+  description: Contains all available API endpoints in this codebase
+  version: 1.0.0
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: argentBank@gmail.com
+tags:
+  - name: Accounts
+    description: Everything about your Accounts
+  - name: Transactions
+    description: Everything about your Transactions
+servers:
+  - url: http://localhost:3001/api/v1
+paths:
+  /accounts:
+    get:
+      tags:
+        - Accounts
+      summary: Overview of user accounts
+      description: API for fetching accounts overviews
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          example: Bearer eyJhbGciOiJIMnsddeerIh...
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Accounts'
+        '400':
+          description: Invalid Fields.
+        '401':
+          description: Unauthorized - Invalid or expired bearer token.
+        '500':
+          description: Internal Server Error.
+      security:
+        - Bearer: []
+  /transactions/{account_Id}:
+    get:
+      tags:
+        - Transactions
+      summary: Find transactions by account
+      description: API for fetching all account transactions
+      operationId: getAllTransactionsById
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          example: Bearer eyJhbGciOiJIMnsddeerIh...
+          schema:
+            type: string
+        - in: path
+          name: account_Id
+          description: ID of account to return
+          required: true
+          example: 48F4a8T26Aart
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transactions'
+        '400':
+          description: Invalid Fields.
+        '401':
+          description: Unauthorized - Invalid or expired bearer token.
+        '404':
+          description: Account not found.
+        '500':
+          description: Internal Server Error.
+      security:
+        - Bearer: []
+  /transactions/details/{transaction_Id}:
+    put:
+      tags:
+        - Transactions
+      summary: Modify transaction details by ID
+      description: API for pushing transaction modifications
+      operationId: setTransactionDetailsById
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          example: Bearer eyJhbGciOiJIMnsddeerIh...
+          schema:
+            type: string
+        - in: path
+          name: transaction_Id
+          description: ID of transaction to return
+          required: true
+          example: 84524556
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '400':
+          description: Invalid Fields.
+        '401':
+          description: Unauthorized - Invalid or expired bearer token.
+        '404':
+          description: Transaction not found.
+        '500':
+          description: Internal Server Error.
+      security:
+        - Bearer: []
+components:
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: >-
+        Utilisez un jeton d'authentification Bearer pour accéder aux ressources
+        protégées.
+      name: Authorization
+      in: header
+  schemas:
+    Accounts:
+      type: array
+      items:
+        type: object
+        properties:
+          account_id:
+            type: number
+            description: account id
+          type:
+            type: string
+            description: account type
+          balance:
+            type: number
+            description: account available balance
+        examples:
+          - account_id: 849541
+            type: savings
+            balance: 2541.75
+          - account_id: 123456
+            type: checking
+            balance: 10000
+          - account_id: 789012
+            type: creditCard
+            balance: 5000.54
+    Transactions:
+      type: array
+      items:
+        type: object
+        properties:
+          transaction_Id:
+            type: number
+            description: transaction id
+          date:
+            type: string
+            description: transaction date
+          desc:
+            type: string
+            description: transaction description
+          notes:
+            type: string
+            description: transaction notes
+          cat:
+            type: string
+            description: transaction category
+          type:
+            type: string
+            description: transaction type
+          balance:
+            type: number
+            description: account available balance after this transaction
+        examples:
+          - transaction_Id: 123456789
+            date: '2024-02-25'
+            desc: Gas Station
+            amount: 40.5
+            balance: 1500.75
+            type: Fuel Purchase
+            cat: Transportation
+            notes: Filled up the car tank
+          - transaction_Id: 987654321
+            date: '2024-02-24'
+            desc: Coffee Shop
+            amount: 5.75
+            balance: 152.25
+            type: Card Payment
+            cat: Beverages
+            notes: Bought a latte
+    Transaction:
+      type: object
+      properties:
+        transaction_Id:
+          type: number
+          description: transaction id
+        date:
+          type: string
+          description: transaction date
+        desc:
+          type: string
+          description: transaction description
+        notes:
+          type: string
+          description: transaction notes
+        cat:
+          type: string
+          description: transaction category
+        type:
+          type: string
+          description: transaction type
+        balance:
+          type: number
+          description: account available balance after this transaction
+      examples:
+        - transaction_Id: 123456789
+          date: '2024-02-25'
+          desc: Gas Station
+          amount: 40.5
+          balance: 1500.75
+          type: Fuel Purchase
+          cat: Transportation
+          notes: Filled up the car tank

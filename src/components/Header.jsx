@@ -10,12 +10,13 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { clearUserInfos } from "../redux/store";
 import { updateUser, addToken } from "../redux/store";
+import { useGetProfileMutation } from "../redux/userApi";
 
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user);
-  const PROFILE_URL = `${import.meta.env.VITE_BASE_URL}/profile/`;
+  const [getProfile] = useGetProfileMutation();
 
   const handleSignOut = () => {
     dispatch(clearUserInfos());
@@ -29,16 +30,7 @@ const Header = () => {
     if (userToken) {
       const fetchProfileData = async () => {
         try {
-          const res = await fetch(PROFILE_URL, {
-            method: "post",
-            headers: {
-              authorization: `Bearer ${userToken}`,
-            },
-          });
-
-          if (!res.ok) return console.log("🚀 ~ !res.OK:", res);
-
-          const data = await res.json();
+          const data = await getProfile(userToken).unwrap();
           dispatch(updateUser(data.body));
           dispatch(addToken(userToken));
         } catch (error) {
@@ -48,7 +40,7 @@ const Header = () => {
 
       fetchProfileData();
     }
-  }, [dispatch, navigate, PROFILE_URL]);
+  }, [dispatch, navigate, getProfile]);
 
   return (
     <header className="main-nav">

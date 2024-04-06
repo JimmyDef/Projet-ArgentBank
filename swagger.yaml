@@ -29,24 +29,24 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Successful operation.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Accounts'
-        '400':
+                $ref: "#/components/schemas/Accounts"
+        "400":
           description: Invalid Fields.
-        '401':
+        "401":
           description: Unauthorized - Invalid or expired bearer token.
-        '500':
+        "500":
           description: Internal Server Error.
       security:
         - Bearer: []
-  /transactions/{account_Id}:
+  /accounts/{account_Id}/transactions:
     get:
       tags:
-        - Transactions
+        - Accounts
       summary: Find transactions by account
       description: API for fetching all account transactions
       operationId: getAllTransactionsById
@@ -66,23 +66,23 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Successful operation.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Transactions'
-        '400':
+                $ref: "#/components/schemas/Transactions"
+        "400":
           description: Invalid Fields.
-        '401':
+        "401":
           description: Unauthorized - Invalid or expired bearer token.
-        '404':
+        "404":
           description: Account not found.
-        '500':
+        "500":
           description: Internal Server Error.
       security:
         - Bearer: []
-  /transactions/details/{transaction_Id}:
+  /transactions/{transaction_Id}:
     put:
       tags:
         - Transactions
@@ -105,19 +105,19 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Transaction'
-        '400':
+                $ref: "#/components/schemas/Transaction"
+        "400":
           description: Invalid Fields.
-        '401':
+        "401":
           description: Unauthorized - Invalid or expired bearer token.
-        '404':
+        "404":
           description: Transaction not found.
-        '500':
+        "500":
           description: Internal Server Error.
       security:
         - Bearer: []
@@ -185,7 +185,7 @@ components:
             description: account available balance after this transaction
         examples:
           - transaction_Id: 123456789
-            date: '2024-02-25'
+            date: "2024-02-25"
             desc: Gas Station
             amount: 40.5
             balance: 1500.75
@@ -193,7 +193,7 @@ components:
             cat: Transportation
             notes: Filled up the car tank
           - transaction_Id: 987654321
-            date: '2024-02-24'
+            date: "2024-02-24"
             desc: Coffee Shop
             amount: 5.75
             balance: 152.25
@@ -226,7 +226,7 @@ components:
           description: account available balance after this transaction
       examples:
         - transaction_Id: 123456789
-          date: '2024-02-25'
+          date: "2024-02-25"
           desc: Gas Station
           amount: 40.5
           balance: 1500.75

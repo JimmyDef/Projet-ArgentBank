@@ -3,13 +3,16 @@ import styled from "styled-components";
 
 const Error = styled.main`
 text-align: center;
-// margin: 100px auto ;
 padding: 40px;
 h1 {    
-    font-size: 6rem;
+    font-size: 4rem;
     font-weight: 700;
     margin-bottom: 20px;
     color: #42b983;
+     @media (min-width: 400px) {
+         
+        font-size: 6rem; 
+    }
     }
 p {
   font-size: 1.5rem;
@@ -30,7 +33,7 @@ a {
         background-color: #42b983;
         
     }
-     @media (min-width: 350px) {
+     @media (min-width: 400px) {
         padding: 10px 20px; 
         font-size: 1.3rem; 
     }

@@ -6,16 +6,16 @@ import { addToken } from "../redux/store";
 import { useNavigate } from "react-router-dom";
 import { setItemStorage } from "./../utils/modules";
 import Loader from "../components/loader/Loader";
+import { useLoginMutation } from "../redux/userApi";
 
 const Signin = () => {
   const [isIdentifiersOk, setIsIdentifiersOk] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     userName: "",
     password: "",
     isChecked: false,
   });
-
+  const [login, { isLoading }] = useLoginMutation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleCheckBox = (e) => {
@@ -23,36 +23,20 @@ const Signin = () => {
   };
 
   const handleSubmit = (e) => {
-    const LOGIN_URL = `${import.meta.env.VITE_BASE_URL}/login`;
     e.preventDefault();
 
     const handleSignIn = async () => {
-      setIsLoading(true);
       try {
-        const res = await fetch(LOGIN_URL, {
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            ...formData,
-            email: formData.userName,
-            password: formData.password,
-          }),
-        });
-
-        if (!res.ok) {
+        const response = await login(formData).unwrap();
+        if (response.status !== 200) {
           setIsIdentifiersOk(false);
-          console.log("🚀 ~ !res.ok non-authentifié:", res.status, res.ok);
+          console.log("🚀 ~ response.status:", response.status);
           return;
         }
 
-        const data = await res.json();
-
-        dispatch(addToken(data.body.token));
-
+        dispatch(addToken(response.body.token));
         if (formData.isChecked) {
-          setItemStorage(data.body.token);
+          setItemStorage(response.body.token);
         }
         if (!formData.isChecked) {
           setItemStorage("");
@@ -62,8 +46,6 @@ const Signin = () => {
       } catch (error) {
         navigate("/not-found");
         console.log("🚀 ~ error POST SignIn:", error);
-      } finally {
-        setIsLoading(false);
       }
     };
     handleSignIn();

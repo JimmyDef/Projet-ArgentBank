@@ -30,11 +30,13 @@ const Header = () => {
     if (userToken) {
       const fetchProfileData = async () => {
         try {
-          const data = await getProfile(userToken).unwrap();
-          dispatch(updateUser(data.body));
-          dispatch(addToken(userToken));
+          const response = await getProfile(userToken).unwrap();
+          if (response.status === 200) {
+            dispatch(updateUser(response.body));
+            dispatch(addToken(userToken));
+          }
         } catch (error) {
-          console.log("🚀 ~ error fetch POST:", error);
+          console.log("🚀 ~ error getProfile:", error);
         }
       };
 

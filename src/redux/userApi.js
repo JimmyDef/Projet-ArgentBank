@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const URL = `${import.meta.env.VITE_BASE_URL}`;
-// const URL = "http://localhost:3001/api/v1/user";
 
 export const userApi = createApi({
   reducerPath: "userApi",
@@ -28,7 +27,7 @@ export const userApi = createApi({
       }),
     }),
     changeProfile: builder.mutation({
-      query: (token, formData) => ({
+      query: ({ token, formData }) => ({
         url: "/profile",
         method: "PUT",
         headers: {

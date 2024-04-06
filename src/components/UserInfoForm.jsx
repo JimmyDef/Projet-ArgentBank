@@ -7,16 +7,14 @@ import PropTypes from "prop-types";
 const UserInfoForm = ({ setDisplayEditForm }) => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user);
-  // const [firstName, setFirstName] = useState("");
-  // const [firstNameError, setFirstNameError] = useState(false);
-  // const [lastName, setLastName] = useState("");
-  // const [lastNameError, setLastNameError] = useState(false);
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     errors: { firstName: false, lastName: false },
   });
 
+  const [changeProfile] = useChangeProfileMutation();
   const cancelModification = (e) => {
     e.preventDefault();
     setFormData({ ...formData, firstName: "", lastName: "" });
@@ -24,36 +22,20 @@ const UserInfoForm = ({ setDisplayEditForm }) => {
   };
 
   const updateUserProfile = async () => {
-    const PROFILE_URL = `${import.meta.env.VITE_BASE_URL}/profile`;
+    const queryParams = { token: userData.token, formData };
     try {
-      const res = await fetch(PROFILE_URL, {
-        method: "PUT",
-        headers: {
-          authorization: `Bearer ${userData.token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-        }),
-      });
-      if (!res.ok) {
-        console.log("🚀 ~ !res.ok:", res.ok);
-        return;
+      const response = await changeProfile(queryParams).unwrap();
+
+      if (response.status === 200) {
+        dispatch(
+          updateUser({
+            ...formData,
+          })
+        );
+
+        setFormData({ ...formData, firstName: "", lastName: "" });
+        setDisplayEditForm(false);
       }
-      const response = await res.json();
-      console.log("🚀 ~ update OK:", response);
-
-      dispatch(
-        updateUser({
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-        })
-      );
-
-      setFormData({ ...formData, firstName: "", lastName: "" });
-
-      setDisplayEditForm(false);
     } catch (error) {
       console.log("🚀 ~ error:", error);
     }
@@ -62,7 +44,6 @@ const UserInfoForm = ({ setDisplayEditForm }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const errors = {};
-
     if (!formData.firstName) errors.firstName = true;
     if (!formData.lastName) errors.lastName = true;
     setFormData({ ...formData, errors: errors });

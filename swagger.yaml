@@ -29,17 +29,17 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Successful operation.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Accounts"
-        "400":
+                $ref: '#/components/schemas/Accounts'
+        '400':
           description: Invalid Fields.
-        "401":
+        '401':
           description: Unauthorized - Invalid or expired bearer token.
-        "500":
+        '500':
           description: Internal Server Error.
       security:
         - Bearer: []
@@ -66,19 +66,19 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Successful operation.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Transactions"
-        "400":
+                $ref: '#/components/schemas/Transactions'
+        '400':
           description: Invalid Fields.
-        "401":
+        '401':
           description: Unauthorized - Invalid or expired bearer token.
-        "404":
+        '404':
           description: Account not found.
-        "500":
+        '500':
           description: Internal Server Error.
       security:
         - Bearer: []
@@ -89,6 +89,19 @@ paths:
       summary: Modify transaction details by ID
       description: API for pushing transaction modifications
       operationId: setTransactionDetailsById
+      requestBody:
+        description: Update an existent transaction
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PUTtransaction'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/PUTtransaction'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PUTtransaction'
+        required: true
       parameters:
         - in: header
           name: Authorization
@@ -105,19 +118,19 @@ paths:
           schema:
             type: number
       responses:
-        "200":
+        '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Transaction"
-        "400":
+                $ref: '#/components/schemas/Transaction'
+        '400':
           description: Invalid Fields.
-        "401":
+        '401':
           description: Unauthorized - Invalid or expired bearer token.
-        "404":
+        '404':
           description: Transaction not found.
-        "500":
+        '500':
           description: Internal Server Error.
       security:
         - Bearer: []
@@ -185,7 +198,7 @@ components:
             description: account available balance after this transaction
         examples:
           - transaction_Id: 123456789
-            date: "2024-02-25"
+            date: '2024-02-25'
             desc: Gas Station
             amount: 40.5
             balance: 1500.75
@@ -193,13 +206,22 @@ components:
             cat: Transportation
             notes: Filled up the car tank
           - transaction_Id: 987654321
-            date: "2024-02-24"
+            date: '2024-02-24'
             desc: Coffee Shop
             amount: 5.75
             balance: 152.25
             type: Card Payment
             cat: Beverages
             notes: Bought a latte
+    PUTtransaction:
+      type: object
+      properties:
+        cat:
+          type: string
+          description: transaction category
+        type:
+          type: string
+          description: transaction type
     Transaction:
       type: object
       properties:
@@ -226,7 +248,7 @@ components:
           description: account available balance after this transaction
       examples:
         - transaction_Id: 123456789
-          date: "2024-02-25"
+          date: '2024-02-25'
           desc: Gas Station
           amount: 40.5
           balance: 1500.75

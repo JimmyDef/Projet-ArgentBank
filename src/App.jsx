@@ -3,7 +3,7 @@ import RootLayout from "./layout/RootLayout";
 import NotFound from "./pages/404";
 import { Provider } from "react-redux";
 import Home from "./pages/Home";
-import Profile from "./pages/Profile";
+import Profile from "./pages/Profile copt";
 import Signin from "./pages/SignIn";
 import { store } from "./redux/store";
 

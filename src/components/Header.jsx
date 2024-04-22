@@ -32,8 +32,8 @@ const Header = () => {
         try {
           const response = await getProfile(userToken).unwrap();
           if (response.status === 200) {
-            dispatch(updateUser(response.body));
             dispatch(addToken(userToken));
+            dispatch(updateUser(response.body));
           }
         } catch (error) {
           console.log("🚀 ~ error getProfile:", error);

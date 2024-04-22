@@ -20,7 +20,6 @@ const UserInfoForm = ({ setDisplayEditForm }) => {
     setFormData({ ...formData, firstName: "", lastName: "" });
     setDisplayEditForm(false);
   };
-
   const updateUserProfile = async () => {
     const queryParams = { token: userData.token, formData };
     try {
@@ -52,9 +51,10 @@ const UserInfoForm = ({ setDisplayEditForm }) => {
   };
 
   const handleChange = (e) => {
+    const { id, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.id]: e.target.value,
+      [id]: value,
     });
   };
 
@@ -94,9 +94,7 @@ const UserInfoForm = ({ setDisplayEditForm }) => {
           : " "}
       </p>
       <div className="edit-button-wrapper">
-        <button className="edit-button" onClick={handleSubmit}>
-          Save
-        </button>
+        <button className="edit-button">Save</button>
         <button className="edit-button" onClick={cancelModification}>
           Cancel
         </button>

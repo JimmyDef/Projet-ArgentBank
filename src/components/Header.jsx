@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-
 import { Link, useNavigate } from "react-router-dom";
 import logo from "./../assets/img/argentBankLogo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,6 +10,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { clearUserInfos } from "../redux/store";
 import { updateUser, addToken } from "../redux/store";
 import { useGetProfileMutation } from "../redux/userApi";
+import {
+  getItemStorage,
+  removeItemStorage,
+  checkTokenValidity,
+} from "./../utils/modules";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -20,28 +24,32 @@ const Header = () => {
 
   const handleSignOut = () => {
     dispatch(clearUserInfos());
-    localStorage.removeItem("userToken");
+    removeItemStorage();
     navigate("/");
   };
 
   useEffect(() => {
-    const userToken = JSON.parse(localStorage.getItem("userToken"));
+    // Si la vérification du token est négative, on ne se connecte  pas et on reste sur la page d'accueil.
+    if (!checkTokenValidity()) return;
+    const userToken = getItemStorage();
 
-    if (userToken) {
-      const fetchProfileData = async () => {
-        try {
-          const response = await getProfile(userToken).unwrap();
-          if (response.status === 200) {
-            dispatch(addToken(userToken));
-            dispatch(updateUser(response.body));
-          }
-        } catch (error) {
-          console.log("🚀 ~ error getProfile:", error);
+    // ----------------------------
+    // Récupération du profile si un token est présent et valide dans le local storage.
+    // ----------------------------
+    const fetchProfileData = async () => {
+      try {
+        const response = await getProfile(userToken).unwrap();
+        if (response.status === 200) {
+          dispatch(addToken(userToken));
+          dispatch(updateUser(response.body));
         }
-      };
+      } catch (error) {
+        console.log("🚀 ~ error getProfile Header:", error);
+        return navigate("/sign-in");
+      }
+    };
 
-      fetchProfileData();
-    }
+    fetchProfileData();
   }, [dispatch, navigate, getProfile]);
 
   return (

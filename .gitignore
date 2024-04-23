@@ -24,3 +24,4 @@ dist-ssr
 *.sln
 *.sw?
 src/pages/Profile copt.jsx
+.env

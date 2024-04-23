@@ -28,23 +28,20 @@ const Signin = () => {
     const handleSignIn = async () => {
       try {
         const response = await login(formData).unwrap();
-        if (response.status !== 200) {
-          setIsIdentifiersOk(false);
-          console.log("🚀 ~ response.status:", response.status);
-          return;
-        }
+        if (response.status === 200) {
+          dispatch(addToken(response.body.token));
 
-        dispatch(addToken(response.body.token));
-        if (formData.isChecked) {
-          setItemStorage(response.body.token);
-        }
-        if (!formData.isChecked) {
-          setItemStorage("");
-        }
+          if (formData.isChecked) {
+            setItemStorage(response.body.token);
+          }
+          if (!formData.isChecked) {
+            setItemStorage("");
+          }
 
-        navigate("/profile");
+          navigate("/profile");
+        }
       } catch (error) {
-        navigate("/not-found");
+        setIsIdentifiersOk(false);
         console.log("🚀 ~ error POST SignIn:", error);
       }
     };

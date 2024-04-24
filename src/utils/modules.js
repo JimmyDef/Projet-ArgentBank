@@ -1,3 +1,7 @@
+// ----------------------------
+// Gestion du local storage
+// ----------------------------
+
 export const setItemStorage = (add) => {
   localStorage.setItem("userToken", JSON.stringify(add));
 };
@@ -10,11 +14,16 @@ export const removeItemStorage = () => {
   localStorage.removeItem("userToken");
 };
 
-export const checkTokenValidity = () => {
+// ----------------------------
+// Fonction validation du token.
+// Un mauvais item dans le local storage sera écrasé/nettoyé lors d'une  re-connexion.
+// ----------------------------
+
+export const isTokenValid = () => {
   const userToken = localStorage.getItem("userToken");
 
   if (!userToken || userToken.trim() === "") {
-    console.error("Token missing or empty in local storage.");
+    console.info("Token missing or empty in local storage.");
     return false;
   }
   try {
@@ -23,9 +32,10 @@ export const checkTokenValidity = () => {
       console.error("Token in local storage is not a string.");
       return false;
     }
+
     return true;
   } catch (error) {
-    console.error("Error parsing token from local storage:", error);
+    console.error("Error parsing token from local storage:");
     return false;
   }
 };

@@ -199,15 +199,21 @@ span {
   color: #fff;
 }
 
+.sign-out-title {
+  margin-top: 50px;
+}
 .sign-in-content {
   box-sizing: border-box;
   background-color: white;
-  width: 300px;
+  max-width: 300px;
   margin: 0 auto;
   margin-top: 3rem;
   padding: 2rem;
 }
 
+.sign-in-content:has(.sign-out-title) {
+  margin-top: 150px;
+}
 .sign-in-icon {
   font-size: 5rem;
 }
@@ -340,8 +346,8 @@ span {
   color: #fff;
   cursor: pointer;
 }
-.transaction-button:hover {
-}
+/* .transaction-button:hover {
+} */
 
 @media (min-width: 720px) {
   .account {

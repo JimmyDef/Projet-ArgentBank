@@ -29,21 +29,21 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Successful operation.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Accounts'
-        '400':
+                $ref: "#/components/schemas/Accounts"
+        "400":
           description: Invalid Fields.
-        '401':
+        "401":
           description: Unauthorized - Invalid or expired bearer token.
-        '500':
+        "500":
           description: Internal Server Error.
       security:
         - Bearer: []
-  /accounts/{account_Id}/transactions:
+  /accounts/{account_Id}/transactions/{start_date}/{end_date}:
     get:
       tags:
         - Accounts
@@ -65,25 +65,39 @@ paths:
           example: 48F4a8T26Aart
           schema:
             type: string
+        - name: start_date
+          in: path
+          description: Date de début des transactions (format YYYY-MM-DD).
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: end_date
+          in: path
+          description: Date de fin des transactions (format YYYY-MM-DD).
+          required: true
+          schema:
+            type: string
+            format: date
       responses:
-        '200':
+        "200":
           description: Successful operation.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Transactions'
-        '400':
+                $ref: "#/components/schemas/Transactions"
+        "400":
           description: Invalid Fields.
-        '401':
+        "401":
           description: Unauthorized - Invalid or expired bearer token.
-        '404':
+        "404":
           description: Account not found.
-        '500':
+        "500":
           description: Internal Server Error.
       security:
         - Bearer: []
   /transactions/{transaction_Id}:
-    put:
+    patch:
       tags:
         - Transactions
       summary: Modify transaction details by ID
@@ -92,15 +106,10 @@ paths:
       requestBody:
         description: Update an existent transaction
         content:
-          application/json:
+          application/merge-patch+json:
             schema:
-              $ref: '#/components/schemas/PUTtransaction'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/PUTtransaction'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PUTtransaction'
+              $ref: "#/components/schemas/patch-transaction"
+
         required: true
       parameters:
         - in: header
@@ -118,19 +127,19 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Transaction'
-        '400':
+                $ref: "#/components/schemas/Transaction"
+        "400":
           description: Invalid Fields.
-        '401':
+        "401":
           description: Unauthorized - Invalid or expired bearer token.
-        '404':
+        "404":
           description: Transaction not found.
-        '500':
+        "500":
           description: Internal Server Error.
       security:
         - Bearer: []
@@ -181,13 +190,13 @@ components:
           date:
             type: string
             description: transaction date
-          desc:
+          description:
             type: string
             description: transaction description
           notes:
             type: string
             description: transaction notes
-          cat:
+          category:
             type: string
             description: transaction category
           type:
@@ -198,25 +207,25 @@ components:
             description: account available balance after this transaction
         examples:
           - transaction_Id: 123456789
-            date: '2024-02-25'
-            desc: Gas Station
+            date: "2024-02-25"
+            description: Gas Station
             amount: 40.5
             balance: 1500.75
             type: Fuel Purchase
-            cat: Transportation
+            category: Transportation
             notes: Filled up the car tank
           - transaction_Id: 987654321
-            date: '2024-02-24'
-            desc: Coffee Shop
+            date: "2024-02-24"
+            description: Coffee Shop
             amount: 5.75
             balance: 152.25
             type: Card Payment
-            cat: Beverages
+            category: Beverages
             notes: Bought a latte
-    PUTtransaction:
+    patch-transaction:
       type: object
       properties:
-        cat:
+        category:
           type: string
           description: transaction category
         type:
@@ -231,13 +240,13 @@ components:
         date:
           type: string
           description: transaction date
-        desc:
+        description:
           type: string
           description: transaction description
         notes:
           type: string
           description: transaction notes
-        cat:
+        category:
           type: string
           description: transaction category
         type:
@@ -248,10 +257,10 @@ components:
           description: account available balance after this transaction
       examples:
         - transaction_Id: 123456789
-          date: '2024-02-25'
-          desc: Gas Station
+          date: "2024-02-25"
+          description: Gas Station
           amount: 40.5
           balance: 1500.75
           type: Fuel Purchase
-          cat: Transportation
+          category: Transportation
           notes: Filled up the car tank

@@ -13,7 +13,7 @@ import { useGetProfileMutation } from "../redux/userApi";
 import {
   getItemStorage,
   removeItemStorage,
-  checkTokenValidity,
+  isTokenValid,
 } from "./../utils/modules";
 
 const Header = () => {
@@ -30,22 +30,20 @@ const Header = () => {
 
   useEffect(() => {
     // Si la vérification du token est négative, on ne se connecte  pas et on reste sur la page d'accueil.
-    if (!checkTokenValidity()) return;
+    if (!isTokenValid()) return removeItemStorage();
     const userToken = getItemStorage();
 
     // ----------------------------
-    // Récupération du profile si un token est présent et valide dans le local storage.
-    // ----------------------------
+    // Récupération du profile si un token est présent et valide dans le local storage. Si jeton expired ou mal renseigné: retour log-In.
+
     const fetchProfileData = async () => {
       try {
         const response = await getProfile(userToken).unwrap();
-        if (response.status === 200) {
-          dispatch(addToken(userToken));
-          dispatch(updateUser(response.body));
-        }
+        // if (response.status !== 200) return navigate("/sign-in");
+        dispatch(addToken(userToken));
+        dispatch(updateUser(response.body));
       } catch (error) {
         console.log("🚀 ~ error getProfile Header:", error);
-        return navigate("/sign-in");
       }
     };
 

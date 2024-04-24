@@ -2,48 +2,49 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { updateUser } from "../redux/store";
-// import { addToken } from "../redux/store";
-// import styles from "./../sass/profile.module.scss";
 import UserInfoForm from "../components/UserInfoForm";
 import { useGetProfileMutation } from "../redux/userApi";
-import { getItemStorage, checkTokenValidity } from "./../utils/modules";
-import Loader from "../components/loader/Loader";
+import { isTokenValid } from "./../utils/modules";
+import Account from "../components/Account";
+
+import LoaderInto404 from "../components/loader/LoaderInto404";
 const Profile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [getProfile] = useGetProfileMutation();
+  const [getProfile, { isError }] = useGetProfileMutation();
+
   const userData = useSelector((state) => state.user);
   const [displayEditForm, setDisplayEditForm] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    console.log("🚀 ~checkTokenValidity() ", checkTokenValidity());
-    // Si la session s'ouvre directement sur /profile/ et que la vérification du token est négative, on est envoyé sur Sign-IN.
-    if (!checkTokenValidity()) return navigate("/sign-in");
-
+    // Possibilité d'un accès direct à /profile/ :
+    // Si pas de token localstorage et pas de token dans redux: retour Sign-IN.
+    console.log("🚀 ~ userData.token:", userData.token);
+    if (!isTokenValid() && !userData.token) return navigate("/sign-in");
+    // if (!userData.token) return navigate("/sign-in");
     if (userData.token) {
+      console.log("🚀 ~ userData.token2:", userData.token);
+
       const fetchProfileData = async () => {
         try {
           const response = await getProfile(userData.token).unwrap();
-          if (response.status !== 200) {
-            console.log("🚀 ~ response not OK: ", response.status);
-            return navigate("/sign-in");
-          }
-
+          if (response.status !== 200) return navigate("/sign-in");
           dispatch(updateUser(response.body));
           setIsLoading(false);
         } catch (error) {
           console.log("🚀 ~ error getProfile PROFILE:", error);
+          navigate("/not-found");
         }
       };
       fetchProfileData();
     }
-  }, [userData.token, dispatch, navigate, getProfile]);
+  }, [userData.token, dispatch, navigate, getProfile, isError]);
 
   return (
     <main className="main bg-dark">
       {isLoading ? (
-        <Loader />
+        <LoaderInto404 extraclass="format-XXL" />
       ) : (
         <>
           <div className="header">
@@ -66,36 +67,21 @@ const Profile = () => {
             )}
           </div>
           <h2 className="sr-only">Accounts</h2>
-          <section className="account">
-            <div className="account-content-wrapper">
-              <h3 className="account-title">Argent Bank Checking (x8349)</h3>
-              <p className="account-amount">$2,082.79</p>
-              <p className="account-amount-description">Available Balance</p>
-            </div>
-            <div className="account-content-wrapper cta">
-              <button className="transaction-button">View transactions</button>
-            </div>
-          </section>
-          <section className="account">
-            <div className="account-content-wrapper">
-              <h3 className="account-title">Argent Bank Savings (x6712)</h3>
-              <p className="account-amount">$10,928.42</p>
-              <p className="account-amount-description">Available Balance</p>
-            </div>
-            <div className="account-content-wrapper cta">
-              <button className="transaction-button">View transactions</button>
-            </div>
-          </section>
-          <section className="account">
-            <div className="account-content-wrapper">
-              <h3 className="account-title">Argent Bank Credit Card (x8349)</h3>
-              <p className="account-amount">$184.30</p>
-              <p className="account-amount-description">Current Balance</p>
-            </div>
-            <div className="account-content-wrapper cta">
-              <button className="transaction-button">View transactions</button>
-            </div>
-          </section>
+          <Account
+            title="Argent Bank Checking (x8349)"
+            amount="$2,082.79"
+            description="Available Balance"
+          />
+          <Account
+            title="Argent Bank Savings (x6712)"
+            amount="$10,928.42"
+            description="Available Balance"
+          />
+          <Account
+            title="Argent Bank Credit Card (x8349)"
+            amount="$184.30"
+            description="Current Balance"
+          />
         </>
       )}
     </main>

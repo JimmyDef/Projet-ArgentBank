@@ -39,11 +39,14 @@ const Header = () => {
     const fetchProfileData = async () => {
       try {
         const response = await getProfile(userToken).unwrap();
-        // if (response.status !== 200) return navigate("/sign-in");
+
+        console.log("🚀 ~ response:", response);
+
         dispatch(addToken(userToken));
         dispatch(updateUser(response.body));
       } catch (error) {
         console.log("🚀 ~ error getProfile Header:", error);
+        if (error.status === 401) return navigate("/sign-in");
       }
     };
 
@@ -66,7 +69,7 @@ const Header = () => {
           <Link className="main-nav-item" to="profile">
             <FontAwesomeIcon
               icon={faCircleUser}
-              size="lg"
+              size="2xl"
               className="logged-in-icons nav-icon"
             />
             <span className="span-hidden">{userData.firstName}</span>
@@ -74,8 +77,8 @@ const Header = () => {
           <Link className="main-nav-item" onClick={handleSignOut}>
             <FontAwesomeIcon
               icon={faArrowRightFromBracket}
-              size="lg"
-              className="logged-in-icons nav-icon"
+              size="2xl"
+              className="  logged-in-icons  nav-icon"
             />
             <span className="span-hidden">Sign out</span>
           </Link>
@@ -84,7 +87,7 @@ const Header = () => {
         <Link className="main-nav-item" to="sign-in">
           <FontAwesomeIcon
             icon={faCircleUser}
-            size="lg"
+            size="2xl"
             className="nav-icon sign-in"
           />
           <span className="span-hidden-sign-in-txt">Sign In</span>

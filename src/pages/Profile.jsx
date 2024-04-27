@@ -21,8 +21,12 @@ const Profile = () => {
     // Possibilité d'un accès direct à /profile/ :
     // Si pas de token localstorage et pas de token dans redux: retour Sign-IN.
     console.log("🚀 ~ userData.token:", userData.token);
-    if (!isTokenValid() && !userData.token) return navigate("/sign-in");
-    // if (!userData.token) return navigate("/sign-in");
+    if (!isTokenValid() && !userData.token) {
+      console.log("🚀 ~ !userData.token:", !userData.token);
+
+      return navigate("/sign-in");
+    }
+
     if (userData.token) {
       console.log("🚀 ~ userData.token2:", userData.token);
 

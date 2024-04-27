@@ -8,6 +8,9 @@ import { setItemStorage } from "./../utils/modules";
 import Loader from "../components/loader/Loader";
 import { useLoginMutation } from "../redux/userApi";
 import { removeItemStorage } from "./../utils/modules";
+import { Link } from "react-router-dom";
+import { isTokenValid } from "./../utils/modules";
+import { getItemStorage } from "./../utils/modules";
 
 const Signin = () => {
   const userData = useSelector((state) => state.user);
@@ -50,11 +53,12 @@ const Signin = () => {
     };
     handleSignIn();
   };
+
+  // const token = getItemStorage();
   return (
     <main className="main bg-dark">
       <section className="sign-in-content">
-        <FontAwesomeIcon icon={faCircleUser} size="lg" />
-
+        <FontAwesomeIcon icon={faCircleUser} size="2xl" />
         {!userData.token ? (
           <>
             <h1>Sign In</h1>
@@ -114,7 +118,10 @@ const Signin = () => {
               className="sign-in-button sign-out-button"
               onClick={handleChangeAccount}>
               Sign out
-            </button>{" "}
+            </button>
+            <Link className="sign-out-back-profile" to="/profile">
+              Back to user profile
+            </Link>
           </>
         )}
       </section>

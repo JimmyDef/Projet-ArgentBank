@@ -94,8 +94,10 @@ const UserInfoForm = ({ setDisplayEditForm }) => {
           : " "}
       </p>
       <div className="edit-button-wrapper">
-        <button className="edit-button">Save</button>
-        <button className="edit-button" onClick={cancelModification}>
+        <button className="edit-button edit-button-reversed">Save</button>
+        <button
+          className="edit-button edit-button-reversed"
+          onClick={cancelModification}>
           Cancel
         </button>
       </div>

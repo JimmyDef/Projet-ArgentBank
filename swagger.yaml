@@ -35,8 +35,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Accounts"
-        "400":
-          description: Invalid Fields.
         "401":
           description: Unauthorized - Invalid or expired bearer token.
         "500":
@@ -86,12 +84,47 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Transactions"
-        "400":
-          description: Invalid Fields.
         "401":
           description: Unauthorized - Invalid or expired bearer token.
         "404":
           description: Account not found.
+        "500":
+          description: Internal Server Error.
+      security:
+        - Bearer: []
+  /transactions/{transaction_Id}/details:
+    get:
+      tags:
+        - Transactions
+      summary: Get transaction details by ID
+      description: API for getting transaction details
+      operationId: getTransactionDetailsById
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          example: Bearer eyJhbGciOiJIMnsddeerIh...
+          schema:
+            type: string
+        - in: path
+          name: transaction_Id
+          description: ID of transaction to return
+          required: true
+          example: 84524556
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TransactionDetails"
+        "401":
+          description: Unauthorized - Invalid or expired bearer token.
+        "404":
+          description: Transaction not found.
         "500":
           description: Internal Server Error.
       security:
@@ -108,7 +141,7 @@ paths:
         content:
           application/merge-patch+json:
             schema:
-              $ref: "#/components/schemas/patch-transaction"
+              $ref: "#/components/schemas/TransactionUpdate"
 
         required: true
       parameters:
@@ -132,7 +165,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Transaction"
+                $ref: "#/components/schemas/TransactionDetails"
         "400":
           description: Invalid Fields.
         "401":
@@ -222,16 +255,16 @@ components:
             type: Card Payment
             category: Beverages
             notes: Bought a latte
-    patch-transaction:
+    TransactionUpdate:
       type: object
       properties:
         category:
           type: string
           description: transaction category
-        type:
+        notes:
           type: string
           description: transaction type
-    Transaction:
+    TransactionDetails:
       type: object
       properties:
         transaction_Id:

@@ -11,7 +11,7 @@
   margin: 0 auto;
 }
 .dot-spinner.format-XXL {
-  --uib-size: 120px;
+  --uib-size: 80px;
   --uib-speed: 0.9s;
   --uib-color: #ffffff;
   margin-top: 200px;
@@ -20,7 +20,7 @@
   align-items: center;
   justify-content: flex-start;
   height: var(--uib-size);
-  width: 150px;
+  width: 100px;
 }
 
 .dot-spinner__dot {

@@ -3,14 +3,11 @@ import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addToken, clearUserInfos } from "../redux/store";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { setItemStorage } from "./../utils/modules";
-import Loader from "../components/loader/Loader";
+import { Loader } from "../components/loaders/Loaders";
 import { useLoginMutation } from "../redux/userApi";
 import { removeItemStorage } from "./../utils/modules";
-import { Link } from "react-router-dom";
-import { isTokenValid } from "./../utils/modules";
-import { getItemStorage } from "./../utils/modules";
 
 const Signin = () => {
   const userData = useSelector((state) => state.user);
@@ -45,16 +42,13 @@ const Signin = () => {
         }
       } catch (error) {
         console.log("🚀 ~ error POST SignIn:", error);
-        if (error.status !== 400) {
-          removeItemStorage();
-          navigate("/not-found");
-        }
+        if (error.status === 400) return;
+        if (error.status === "FETCH_ERROR") return navigate("/not-found");
       }
     };
     handleSignIn();
   };
 
-  // const token = getItemStorage();
   return (
     <main className="main bg-dark">
       <section className="sign-in-content">

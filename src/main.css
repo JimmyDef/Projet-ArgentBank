@@ -59,9 +59,6 @@ body {
   text-decoration: none;
 }
 
-.main-nav a.router-link-exact-active {
-  /* color: #42b983; */
-}
 .main-nav-item-wrapper {
   display: flex;
   align-items: center;
@@ -221,6 +218,9 @@ span {
   border: var(--main-color) 1px solid;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
+.sign-in-button:hover .dot-spinner__dot::before {
+  background-color: var(--main-color);
+}
 
 .sign-out-title {
   margin-top: 20px;
@@ -365,8 +365,9 @@ span {
   background-color: var(--main-color);
   color: white;
   font-weight: bold;
-  padding: 7px 10px;
-  width: 100px;
+
+  height: 35px;
+  width: 120px;
   border-radius: 5px;
   transition: all 250ms;
   cursor: pointer;
@@ -378,20 +379,26 @@ span {
   border: var(--main-color) 1px solid;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
-
-.edit-button.edit-button-reversed {
+.edit-button.edit-button-form .dot-spinner__dot::before {
+  background-color: var(--main-color);
+}
+.edit-button.edit-button-form:hover .dot-spinner__dot::before {
   background-color: white;
+}
 
+.edit-button.edit-button-form {
+  background-color: white;
+  padding: 0;
+  height: 35px;
   color: var(--main-color);
   border: #6558f570 3px solid;
 }
-.edit-button.edit-button-reversed:hover {
+.edit-button.edit-button-form:hover {
   background-color: var(--main-color);
   color: white;
 }
 
 .header {
-  /* color: #fff; */
   margin-bottom: 2rem;
 }
 
@@ -438,8 +445,9 @@ span {
 
 @media (min-width: 537px) {
   .edit-button {
-    padding: 10px;
+    height: 40px;
   }
+
   .edit-button-wrapper {
     flex-direction: row;
     gap: 20px;

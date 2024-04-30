@@ -10,6 +10,13 @@
   width: 33px;
   margin: 0 auto;
 }
+.dot-spinner.small {
+  --uib-color: #ffffff;
+  --uib-size: 22px;
+  width: 28px;
+  height: var(--uib-size);
+}
+
 .dot-spinner.format-XXL {
   --uib-size: 80px;
   --uib-speed: 0.9s;

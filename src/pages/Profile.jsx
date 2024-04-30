@@ -7,11 +7,11 @@ import { useGetProfileMutation } from "../redux/userApi";
 import { isTokenValid } from "./../utils/modules";
 import Account from "../components/Account";
 
-import LoaderInto404 from "../components/loader/LoaderInto404";
+import { LoaderInto404 } from "../components/loaders/Loaders";
 const Profile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [getProfile, { isError }] = useGetProfileMutation();
+  const [getProfile] = useGetProfileMutation();
 
   const userData = useSelector((state) => state.user);
   const [displayEditForm, setDisplayEditForm] = useState(false);
@@ -20,16 +20,12 @@ const Profile = () => {
   useEffect(() => {
     // Possibilité d'un accès direct à /profile/ :
     // Si pas de token localstorage et pas de token dans redux: retour Sign-IN.
-    console.log("🚀 ~ userData.token:", userData.token);
-    if (!isTokenValid() && !userData.token) {
-      console.log("🚀 ~ !userData.token:", !userData.token);
 
+    if (!isTokenValid() && !userData.token) {
       return navigate("/sign-in");
     }
-
+    if (userData.token && userData.firstName) return setIsLoading(false);
     if (userData.token) {
-      console.log("🚀 ~ userData.token2:", userData.token);
-
       const fetchProfileData = async () => {
         try {
           const response = await getProfile(userData.token).unwrap();
@@ -41,9 +37,10 @@ const Profile = () => {
           navigate("/not-found");
         }
       };
+
       fetchProfileData();
     }
-  }, [userData.token, dispatch, navigate, getProfile, isError]);
+  }, [userData.token, userData.firstName, dispatch, navigate, getProfile]);
 
   return (
     <main className="main bg-dark">

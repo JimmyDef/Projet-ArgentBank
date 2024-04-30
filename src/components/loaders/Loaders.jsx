@@ -1,13 +1,29 @@
-import "./loader.css";
+import "./loaders.css";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import PropTypes from "prop-types";
 
-function LoaderInto404() {
+export const Loader = ({ extraClass }) => {
+  return (
+    <div className={`dot-spinner ${extraClass}`}>
+      <div className="dot-spinner__dot"></div>
+      <div className="dot-spinner__dot"></div>
+      <div className="dot-spinner__dot"></div>
+      <div className="dot-spinner__dot"></div>
+      <div className="dot-spinner__dot"></div>
+      <div className="dot-spinner__dot"></div>
+      <div className="dot-spinner__dot"></div>
+      <div className="dot-spinner__dot"></div>
+    </div>
+  );
+};
+
+export const LoaderInto404 = () => {
   const navigate = useNavigate();
   useEffect(() => {
     const timer = setTimeout(() => {
       navigate("/NotFound");
-    }, 2500);
+    }, 3500);
     return () => clearTimeout(timer);
   });
   return (
@@ -22,6 +38,8 @@ function LoaderInto404() {
       <div className="dot-spinner__dot"></div>
     </div>
   );
-}
+};
 
-export default LoaderInto404;
+Loader.propTypes = {
+  extraClass: PropTypes.string,
+};

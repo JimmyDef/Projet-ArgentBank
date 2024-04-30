@@ -1,5 +1,4 @@
 import PropTypes from "prop-types";
-// Account.jsx
 
 const Account = ({ title, amount, description }) => (
   <section className="account">

@@ -8,7 +8,7 @@ h1 {
     font-size: 4rem;
     font-weight: 700;
     margin-bottom: 20px;
-    color: #42b983;
+    color: #6458f5;
      @media (min-width: 400px) {
          
         font-size: 6rem; 
@@ -30,7 +30,7 @@ a {
     font-weight: 500;
     transition: all 0.3s ease;
     &:hover {
-        background-color: #42b983;
+        background-color: #6458f5;
         
     }
      @media (min-width: 400px) {

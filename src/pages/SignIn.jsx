@@ -40,7 +40,6 @@ const Signin = () => {
         }
       } catch (error) {
         console.log("🚀 ~ error POST SignIn:", error);
-        if (error.status === 400) return;
         if (error.status === "FETCH_ERROR") return navigate("/not-found");
       }
     };
@@ -48,7 +47,7 @@ const Signin = () => {
   };
 
   // --------------------------
-  //Fonction déconnexion, nettoyage du store et localStorage, retour page de connexion.
+  //Fonction déconnexion, nettoyage du store et du localStorage, retour page de connexion.
   // --------------------------
 
   const handleSignOut = () => {

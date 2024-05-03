@@ -18,6 +18,10 @@ export const Loader = ({ extraClass }) => {
   );
 };
 
+// ----------------------------
+//Loader avec un timer qui envoie sur la page  404.
+// ----------------------------
+
 export const LoaderInto404 = () => {
   const navigate = useNavigate();
   useEffect(() => {

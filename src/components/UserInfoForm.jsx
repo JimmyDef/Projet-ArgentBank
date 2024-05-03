@@ -8,7 +8,7 @@ import { clearUserInfos } from "../redux/store";
 import { removeItemStorage } from "./../utils/modules";
 import { useNavigate } from "react-router-dom";
 
-const UserInfoForm = ({ setDisplayEditForm }) => {
+const UserInfoForm = ({ setIsEditModeActive }) => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -53,7 +53,7 @@ const UserInfoForm = ({ setDisplayEditForm }) => {
 
       if (response.status === 200) {
         dispatch(updateUser(updatedUserData));
-        setDisplayEditForm(false);
+        setIsEditModeActive(false);
       }
     } catch (error) {
       if (error.status === 401) {
@@ -84,7 +84,7 @@ const UserInfoForm = ({ setDisplayEditForm }) => {
   const cancelProfileUpdate = (e) => {
     e.preventDefault();
     setFormData({ ...formData, firstName: "", lastName: "" });
-    setDisplayEditForm(false);
+    setIsEditModeActive(false);
   };
 
   return (
@@ -145,6 +145,6 @@ const UserInfoForm = ({ setDisplayEditForm }) => {
 };
 
 UserInfoForm.propTypes = {
-  setDisplayEditForm: PropTypes.func.isRequired,
+  setIsEditModeActive: PropTypes.func.isRequired,
 };
 export default UserInfoForm;

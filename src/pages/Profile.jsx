@@ -6,29 +6,38 @@ import UserInfoForm from "../components/UserInfoForm";
 import { useGetProfileMutation } from "../redux/userApi";
 import { isTokenValid } from "./../utils/modules";
 import Account from "../components/Account";
-
 import { LoaderInto404 } from "../components/loaders/Loaders";
+
 const Profile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [getProfile] = useGetProfileMutation();
 
-  const userData = useSelector((state) => state.user);
-  const [displayEditForm, setDisplayEditForm] = useState(false);
+  const userState = useSelector((state) => state.user);
+  const [isEditModeActive, setIsEditModeActive] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Possibilité d'un accès direct à /profile/ :
+    // -----------------
     // Si pas de token localstorage et pas de token dans redux: retour Sign-IN.
-
-    if (!isTokenValid() && !userData.token) {
+    if (!isTokenValid() && !userState.token) {
       return navigate("/sign-in");
     }
-    if (userData.token && userData.firstName) return setIsLoading(false);
-    if (userData.token) {
+
+    // Vérifie si les données du profil de l'utilisateur sont déjà chargées
+    if (userState.token && userState.firstName) return setIsLoading(false);
+
+    // Si l'utilisateur est authentifié mais les données de profil ne sont pas chargées, récupère les données du profil.
+
+    if (userState.token) {
+      // -------------------
+      // Si réponse n'est pas 200 => retour page de connexion.
+      // Si utilisateur authentifié => Mise à jour du store Redux et fin du Loader.
+      // Si le erreur du serveur => page 404.
+      // -------------------
       const fetchProfileData = async () => {
         try {
-          const response = await getProfile(userData.token).unwrap();
+          const response = await getProfile(userState.token).unwrap();
           if (response.status !== 200) return navigate("/sign-in");
           dispatch(updateUser(response.body));
           setIsLoading(false);
@@ -40,7 +49,7 @@ const Profile = () => {
 
       fetchProfileData();
     }
-  }, [userData.token, userData.firstName, dispatch, navigate, getProfile]);
+  }, [userState.token, userState.firstName, dispatch, navigate, getProfile]);
 
   return (
     <main className="main bg-dark">
@@ -52,17 +61,17 @@ const Profile = () => {
             <h1>
               Welcome back
               <br />
-              {userData.firstName} {userData.lastName} !
+              {userState.firstName} {userState.lastName} !
             </h1>
-            {displayEditForm ? (
+            {isEditModeActive ? (
               <UserInfoForm
-                displayEditForm={displayEditForm}
-                setDisplayEditForm={setDisplayEditForm}
+                isEditModeActive={isEditModeActive}
+                setIsEditModeActive={setIsEditModeActive}
               />
             ) : (
               <button
                 className="edit-button"
-                onClick={() => setDisplayEditForm(true)}>
+                onClick={() => setIsEditModeActive(true)}>
                 Edit Name
               </button>
             )}

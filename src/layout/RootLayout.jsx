@@ -3,7 +3,7 @@ import Header from "./../components/Header";
 import Footer from "./../components/Footer";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { updateUser, addToken } from "../redux/store";
+import { updateUser, addToken, clearUserInfos } from "../redux/store";
 import { useGetProfileMutation } from "../redux/userApi";
 import {
   getItemStorage,
@@ -18,12 +18,22 @@ function RootLayout() {
   const pageLocation = useLocation();
 
   useEffect(() => {
-    // Si la vérification du token est négative, on ne se connecte  pas et on reste sur la page d'accueil.
-    if (!isTokenValid()) return removeItemStorage();
+    // Si vérification du token  négative  => suppression, pas de tentative de connexion.
+
+    if (!isTokenValid()) return;
+
+    // ----------------------------
+    // Si Token présent dans le localStorage => Récupération du profile
+    // Si Jeton expired / mal renseigné: retour page log-In.
+    // ----------------------------
+
     const userToken = getItemStorage();
 
     // ----------------------------
-    // Récupération du profile si un token est présent et valide dans le local storage. Si jeton expired ou mal renseigné: retour log-In.
+    // Fonction Tentative de fetch à l'aide du token localStorage.
+    // Si OK => On nourrie le store redux  avec les infos utilisateurs.
+    // Nettoyage du localStorage et du store si jeton compromis/expiré.
+    // ----------------------------
 
     const fetchProfileData = async () => {
       try {
@@ -34,6 +44,7 @@ function RootLayout() {
         console.log("🚀 ~ error getProfile Layout:", error);
         if (error.status === 401) {
           removeItemStorage();
+          dispatch(clearUserInfos());
           navigate("/sign-in");
           return;
         }
@@ -47,6 +58,7 @@ function RootLayout() {
 
     fetchProfileData();
   }, [dispatch, navigate, getProfile, pageLocation]);
+
   return (
     <>
       <Header />

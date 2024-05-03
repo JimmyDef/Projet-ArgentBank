@@ -8,7 +8,10 @@ export const userApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: `${URL}` }),
 
   endpoints: (builder) => ({
-    login: builder.mutation({
+    //
+    // Construction du endpoint pour récupérer le jeton d'authentification.
+
+    signIn: builder.mutation({
       query: (formData) => ({
         url: "/login",
         method: "POST",
@@ -18,6 +21,9 @@ export const userApi = createApi({
         },
       }),
     }),
+
+    // Construction du endpoint pour récupérer les infos profile utilisateur.
+
     getProfile: builder.mutation({
       query: (token) => ({
         url: "/profile",
@@ -27,7 +33,10 @@ export const userApi = createApi({
         },
       }),
     }),
-    changeProfile: builder.mutation({
+
+    // Construction du endpoint pour mettre à jour les infos profile utilisateur.
+
+    updateProfile: builder.mutation({
       query: ({ token, formData }) => ({
         url: "/profile",
         method: "PUT",
@@ -41,7 +50,7 @@ export const userApi = createApi({
 });
 
 export const {
-  useLoginMutation,
+  useSignInMutation,
   useGetProfileMutation,
-  useChangeProfileMutation,
+  useUpdateProfileMutation,
 } = userApi;

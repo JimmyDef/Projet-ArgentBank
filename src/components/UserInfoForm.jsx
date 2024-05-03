@@ -1,28 +1,47 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useChangeProfileMutation } from "../redux/userApi";
+import { useUpdateProfileMutation } from "../redux/userApi";
 import { updateUser } from "../redux/store";
 import PropTypes from "prop-types";
 import { Loader } from "./loaders/Loaders";
+import { clearUserInfos } from "../redux/store";
+import { removeItemStorage } from "./../utils/modules";
+import { useNavigate } from "react-router-dom";
+
 const UserInfoForm = ({ setDisplayEditForm }) => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user);
-
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     errors: false,
   });
 
-  const [changeProfile, { isError, isLoading }] = useChangeProfileMutation();
+  const [updateProfile, { isError, isLoading }] = useUpdateProfileMutation();
 
-  const cancelModification = (e) => {
+  // --------------------------
+  // Fonction submit formulaire et vérification des champs de données:
+  //  - Si aucun champs renseigné => notification visuel
+  //  - Si OK : => push dataBase + redux
+  // --------------------------
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setFormData({ ...formData, firstName: "", lastName: "" });
-    setDisplayEditForm(false);
+    if (!formData.firstName && !formData.lastName)
+      return setFormData({ ...formData, errors: true });
+
+    submitProfileUpdate();
   };
 
-  const updateUserProfile = async () => {
+  // --------------------------
+  // Fonction mise à jour profil utilisateur:  Fetch API + état Redux.
+  // Si Fetch OK => update du store et fermeture du form.
+  // Si erreur Authentification => Nettoyage du localStorage et du store, retour page log-in.
+  // Si serveur distant inaccessible => notification visuel via isError fourni par RTK query.
+  // --------------------------
+
+  const submitProfileUpdate = async () => {
     const updatedUserData = {
       firstName: formData.firstName || userData.firstName,
       lastName: formData.lastName || userData.lastName,
@@ -30,32 +49,42 @@ const UserInfoForm = ({ setDisplayEditForm }) => {
     const queryParams = { token: userData.token, formData: updatedUserData };
 
     try {
-      const response = await changeProfile(queryParams).unwrap();
+      const response = await updateProfile(queryParams).unwrap();
 
       if (response.status === 200) {
         dispatch(updateUser(updatedUserData));
         setDisplayEditForm(false);
       }
     } catch (error) {
+      if (error.status === 401) {
+        removeItemStorage();
+        dispatch(clearUserInfos());
+        navigate("/sign-in");
+        return;
+      }
       setFormData({ ...formData, errors: false });
       console.log("🚀 ~ error:", error);
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!formData.firstName && !formData.lastName)
-      return setFormData({ ...formData, errors: true });
-
-    updateUserProfile();
-  };
-
+  // --------------------------
+  // Fonction gestion des changements dans les champs du formulaire.
+  // --------------------------
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData({
       ...formData,
       [id]: value,
     });
+  };
+
+  // --------------------------
+  // Fonction annulation et fermeture du formulaire  nom/prénom
+  // --------------------------
+  const cancelProfileUpdate = (e) => {
+    e.preventDefault();
+    setFormData({ ...formData, firstName: "", lastName: "" });
+    setDisplayEditForm(false);
   };
 
   return (
@@ -107,7 +136,7 @@ const UserInfoForm = ({ setDisplayEditForm }) => {
         </button>
         <button
           className="edit-button edit-button-form"
-          onClick={cancelModification}>
+          onClick={cancelProfileUpdate}>
           Cancel
         </button>
       </div>

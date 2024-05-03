@@ -15,15 +15,14 @@ export const removeItemStorage = () => {
 };
 
 // ----------------------------
-// Fonction validation du token.
-// Un mauvais item dans le local storage sera écrasé/nettoyé lors d'une  re-connexion.
+// Fonction vérification de présence et d'intégrité du token.
+// Un mauvais token dans le localStorage sera écrasé/nettoyé.
 // ----------------------------
 
 export const isTokenValid = () => {
   const userToken = localStorage.getItem("userToken");
 
   if (!userToken || userToken.trim() === "") {
-    console.info("Token missing or empty in local storage.");
     return false;
   }
   try {
@@ -35,7 +34,10 @@ export const isTokenValid = () => {
 
     return true;
   } catch (error) {
-    console.error("Error parsing token from local storage:");
+    removeItemStorage();
+    console.error(
+      "Error parsing token from local storage: token has been removed from localHost"
+    );
     return false;
   }
 };

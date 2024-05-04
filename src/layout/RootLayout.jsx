@@ -18,9 +18,25 @@ function RootLayout() {
   const pageLocation = useLocation();
 
   useEffect(() => {
-    // Si vérification du token  négative  => suppression, pas de tentative de connexion.
+    // Gestion du titre de la page en fonction de l'url
+    switch (pageLocation.pathname) {
+      case "/":
+        document.title = "Homepage | Argent Bank";
+        break;
+      case "/profile":
+        document.title = "Profile | Argent Bank";
+        break;
+      case "/sign-in":
+        document.title = "Sign-In | Argent Bank";
+        break;
+      default:
+        document.title = "Argent Bank";
+    }
 
-    if (!isTokenValid()) return;
+    if (!isTokenValid())
+      // Si vérification du token  négative  => suppression, pas de tentative de connexion.
+
+      return;
 
     // ----------------------------
     // Si Token présent dans le localStorage => Récupération du profile

@@ -40,7 +40,8 @@ const Signin = () => {
         }
       } catch (error) {
         console.log("🚀 ~ error POST SignIn:", error);
-        if (error.status === "FETCH_ERROR") return navigate("/not-found");
+        if (error.status === 400) return;
+        return navigate("/not-found");
       }
     };
     handleSignIn();

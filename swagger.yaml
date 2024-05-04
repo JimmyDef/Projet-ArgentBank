@@ -92,6 +92,52 @@ paths:
       security:
         - Bearer: []
   /transactions/{transaction_Id}:
+    patch:
+      tags:
+        - Transactions
+      summary: Modify transaction details by ID
+      description: API for pushing transaction modifications
+      operationId: setTransactionDetailsById
+      requestBody:
+        description: Update an existent transaction
+        content:
+          application/merge-patch+json:
+            schema:
+              $ref: "#/components/schemas/TransactionUpdate"
+
+        required: true
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          example: Bearer eyJhbGciOiJIMnsddeerIh...
+          schema:
+            type: string
+        - in: path
+          name: transaction_Id
+          description: ID of transaction to return
+          required: true
+          example: 84524556
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TransactionDetails"
+        "400":
+          description: Invalid Fields.
+        "401":
+          description: Unauthorized - Invalid or expired bearer token.
+        "404":
+          description: Transaction not found.
+        "500":
+          description: Internal Server Error.
+      security:
+        - Bearer: []
     get:
       tags:
         - Transactions
@@ -128,100 +174,7 @@ paths:
           description: Internal Server Error.
       security:
         - Bearer: []
-  /transactions/{transaction_Id}/category:
-    patch:
-      tags:
-        - Transactions
-      summary: Modify transaction category by ID
-      description: API for pushing transaction category modifications
-      operationId: setTransactionCategoryById
-      requestBody:
-        description: Update a transaction category
-        content:
-          application/merge-patch+json:
-            schema:
-              $ref: "#/components/schemas/TransactionCategoryUpdate"
 
-        required: true
-      parameters:
-        - in: header
-          name: Authorization
-          description: Attach Bearer JWT token
-          required: true
-          example: Bearer eyJhbGciOiJIMnsddeerIh...
-          schema:
-            type: string
-        - in: path
-          name: transaction_Id
-          description: ID of transaction to return
-          required: true
-          example: 84524556
-          schema:
-            type: number
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/TransactionDetails"
-        "400":
-          description: Invalid Fields.
-        "401":
-          description: Unauthorized - Invalid or expired bearer token.
-        "404":
-          description: Transaction not found.
-        "500":
-          description: Internal Server Error.
-      security:
-        - Bearer: []
-  /transactions/{transaction_Id}/notes:
-    patch:
-      tags:
-        - Transactions
-      summary: Modify transaction notes by ID
-      description: API for pushing transaction notes modifications
-      operationId: setTransactionNotesById
-      requestBody:
-        description: Update an transaction Note
-        content:
-          application/merge-patch+json:
-            schema:
-              $ref: "#/components/schemas/TransactionNotesUpdate"
-
-        required: true
-      parameters:
-        - in: header
-          name: Authorization
-          description: Attach Bearer JWT token
-          required: true
-          example: Bearer eyJhbGciOiJIMnsddeerIh...
-          schema:
-            type: string
-        - in: path
-          name: transaction_Id
-          description: ID of transaction to return
-          required: true
-          example: 84524556
-          schema:
-            type: number
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/TransactionDetails"
-        "400":
-          description: Invalid Fields.
-        "401":
-          description: Unauthorized - Invalid or expired bearer token.
-        "404":
-          description: Transaction not found.
-        "500":
-          description: Internal Server Error.
-      security:
-        - Bearer: []
 components:
   securitySchemes:
     Bearer:
@@ -301,18 +254,15 @@ components:
             type: Card Payment
             category: Beverages
             notes: Bought a latte
-    TransactionCategoryUpdate:
+    TransactionUpdate:
       type: object
       properties:
         category:
           type: string
           description: transaction category
-    TransactionNotesUpdate:
-      type: object
-      properties:
         notes:
           type: string
-          description: transaction notes
+          description: transaction type
     TransactionDetails:
       type: object
       properties:

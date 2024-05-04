@@ -65,10 +65,10 @@ function RootLayout() {
           return;
         }
         if (
-          error.status === "FETCH_ERROR" &&
+          (error.status === "FETCH_ERROR" || "PARSING_ERROR") &&
           pageLocation.pathname === "/profile"
         )
-          return navigate("/NotFound");
+          return navigate("/not-found");
       }
     };
 

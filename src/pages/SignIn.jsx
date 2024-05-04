@@ -13,7 +13,8 @@ const Signin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userState = useSelector((state) => state.user);
-  const [signIn, { isLoading, isError }] = useSignInMutation();
+  const [signIn, { isLoading }] = useSignInMutation();
+  const [isError, setIsError] = useState(false);
   const [formData, setFormData] = useState({
     userName: "",
     password: "",
@@ -40,7 +41,7 @@ const Signin = () => {
         }
       } catch (error) {
         console.log("🚀 ~ error POST SignIn:", error);
-        if (error.status === 400) return;
+        if (error.status === 400) return setIsError(true);
         return navigate("/not-found");
       }
     };

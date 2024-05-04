@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { updateUser } from "../redux/store";
+import { clearUserInfos, updateUser } from "../redux/store";
 import UserInfoForm from "../components/UserInfoForm";
 import { useGetProfileMutation } from "../redux/userApi";
 import { isTokenValid } from "./../utils/modules";
 import Account from "../components/Account";
 import { LoaderInto404 } from "../components/loaders/Loaders";
-
+import { removeItemStorage } from "./../utils/modules";
 const Profile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -24,25 +24,28 @@ const Profile = () => {
       return navigate("/sign-in");
     }
 
-    // Vérifie si les données du profil de l'utilisateur sont déjà chargées
-    if (userState.token && userState.firstName) return setIsLoading(false);
-
     // Si l'utilisateur est authentifié mais les données de profil ne sont pas chargées, récupère les données du profil.
 
     if (userState.token) {
       // -------------------
       // Si réponse n'est pas 200 => retour page de connexion.
-      // Si utilisateur authentifié => Mise à jour du store Redux et fin du Loader.
-      // Si le erreur du serveur => page 404.
+      // Si fetch OK => Mise à jour du store Redux et fin du Loader.
+      // Si token du store compromis ou expiré => page connexion.
+      // Si  erreur du serveur => page 404.
       // -------------------
       const fetchProfileData = async () => {
         try {
           const response = await getProfile(userState.token).unwrap();
-          if (response.status !== 200) return navigate("/sign-in");
           dispatch(updateUser(response.body));
           setIsLoading(false);
         } catch (error) {
           console.log("🚀 ~ error getProfile PROFILE:", error);
+          if (error.status === 401) {
+            removeItemStorage();
+            dispatch(clearUserInfos());
+            navigate("/sign-in");
+            return;
+          }
           navigate("/not-found");
         }
       };

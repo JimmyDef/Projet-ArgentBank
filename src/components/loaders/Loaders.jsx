@@ -26,8 +26,10 @@ export const LoaderInto404 = () => {
   const navigate = useNavigate();
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate("/NotFound");
-    }, 3500);
+      console.log("🚀 ~ Loader expired:");
+      navigate("/not-found");
+    }, 5000);
+
     return () => clearTimeout(timer);
   });
   return (

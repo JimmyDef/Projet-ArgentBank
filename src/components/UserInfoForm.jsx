@@ -63,7 +63,7 @@ const UserInfoForm = ({ setIsEditModeActive }) => {
         return;
       }
       setFormData({ ...formData, errors: false });
-      console.log("🚀 ~ error:", error);
+      console.log("🚀 ~ error userInfoForm:", error);
     }
   };
 

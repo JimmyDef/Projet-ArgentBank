@@ -23,7 +23,7 @@ const Signin = () => {
   // --------------------------
   // Fonction pour gérer la soumission du formulaire de connexion
   // Si fetch OK  => ajout du token au store Redux et redirection page Profile.
-  // Si erreur d'identifiant (error 400) => notification visuel (isError RTK Query)
+  // Si erreur d'identifiant (error 400) => notification visuel (isError)
   // Si Serveur indisponible => page 404
   // --------------------------
 

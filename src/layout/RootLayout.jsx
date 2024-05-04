@@ -48,7 +48,7 @@ function RootLayout() {
     // ----------------------------
     // Fonction Tentative de fetch à l'aide du token localStorage.
     // Si OK => On nourrie le store redux  avec les infos utilisateurs.
-    // Nettoyage du localStorage et du store si jeton compromis/expiré.
+    // Si jeton compromis/expiré => Nettoyage du localStorage et du store.
     // ----------------------------
 
     const fetchProfileData = async () => {

@@ -302,6 +302,10 @@ span {
   font-size: 0.8rem;
   font-weight: bold;
 }
+.fetch-error-msg {
+  color: red;
+  margin: 20px 0 0;
+}
 .footer {
   display: flex;
   justify-content: center;

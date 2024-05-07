@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: Bank Argent transactions API documentation
+  title: Argent Bank transactions API documentation
   description: Contains all available API endpoints in this codebase
   version: 1.0.0
   termsOfService: http://swagger.io/terms/
@@ -181,9 +181,7 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-      description: >-
-        Utilisez un jeton d'authentification Bearer pour accéder aux ressources
-        protégées.
+      description: Use a Bearer authentication token to access protected resources.
       name: Authorization
       in: header
   schemas:

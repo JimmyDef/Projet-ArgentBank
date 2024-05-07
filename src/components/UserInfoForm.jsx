@@ -7,6 +7,7 @@ import { Loader } from "./loaders/Loaders";
 import { clearUserInfos } from "../redux/store";
 import { removeItemStorage } from "./../utils/modules";
 import { useNavigate } from "react-router-dom";
+import { filterNonAlphabeticCharacters } from "./../utils/modules";
 
 const UserInfoForm = ({ setIsEditModeActive }) => {
   const dispatch = useDispatch();
@@ -72,9 +73,10 @@ const UserInfoForm = ({ setIsEditModeActive }) => {
   // --------------------------
   const handleChange = (e) => {
     const { id, value } = e.target;
+    const cleanedValue = filterNonAlphabeticCharacters(value);
     setFormData({
       ...formData,
-      [id]: value,
+      [id]: cleanedValue,
     });
   };
 

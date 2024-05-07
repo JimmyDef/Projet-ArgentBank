@@ -41,3 +41,11 @@ export const isTokenValid = () => {
     return false;
   }
 };
+
+// ----------------------------------------------------
+// Fonction echappement caractères non-alphabetique (tiret autorisé)
+// ----------------------------------------------------
+
+export const filterNonAlphabeticCharacters = (input) => {
+  return input.replace(/[^a-zA-ZÀ-ÖØ-öø-ÿ-'     ]/g, "");
+};

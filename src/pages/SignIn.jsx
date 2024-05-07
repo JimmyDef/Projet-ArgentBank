@@ -13,8 +13,8 @@ const Signin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userState = useSelector((state) => state.user);
-  const [signIn, { isLoading }] = useSignInMutation();
-  const [isError, setIsError] = useState(false);
+  const [signIn, { isLoading, error, isError }] = useSignInMutation();
+  // const [isError, setIsError] = useState(false);
   const [formData, setFormData] = useState({
     userName: "",
     password: "",
@@ -41,8 +41,6 @@ const Signin = () => {
         }
       } catch (error) {
         console.log("🚀 ~ error POST SignIn:", error);
-        if (error.status === 400) return setIsError(true);
-        return navigate("/not-found");
       }
     };
     handleSignIn();
@@ -64,7 +62,8 @@ const Signin = () => {
   const handleCheckBox = (e) => {
     setFormData({ ...formData, isChecked: e.target.checked });
   };
-
+  console.log("🚀 ~ main:", error);
+  console.log("🚀 ~ isERROPR:", isError);
   return (
     <main className="main bg-dark">
       <section className="sign-in-content">
@@ -72,10 +71,13 @@ const Signin = () => {
         {!userState.token ? (
           <>
             <h1>Sign In</h1>
+
             <form onSubmit={handleSubmit}>
               <div
                 className={
-                  !isError ? "input-wrapper" : "input-wrapper warning"
+                  error?.status === 400
+                    ? "input-wrapper warning"
+                    : "input-wrapper"
                 }>
                 <label htmlFor="username">Username</label>
                 <input
@@ -90,7 +92,9 @@ const Signin = () => {
               </div>
               <div
                 className={
-                  !isError ? "input-wrapper" : "input-wrapper warning"
+                  error?.status === 400
+                    ? "input-wrapper warning"
+                    : "input-wrapper"
                 }>
                 <label htmlFor="password">Password</label>
                 <input
@@ -103,7 +107,7 @@ const Signin = () => {
                   }
                 />
                 <p className="warning-logs-msg">
-                  {!isError ? "" : "Wrong IDs"}
+                  {error?.status === 400 ? "Wrong IDs" : null}
                 </p>
               </div>
               <div className="input-remember">
@@ -119,6 +123,9 @@ const Signin = () => {
               <button className="sign-in-button">
                 {!isLoading ? "Sign In" : <Loader />}
               </button>
+              {error && error.status !== 400 ? (
+                <p className="fetch-error-msg">Server not responding</p>
+              ) : null}
             </form>
           </>
         ) : (

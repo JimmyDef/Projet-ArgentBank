@@ -13,7 +13,7 @@ Une documentation swagger un disponible une fois le back-end lancé, décrivant 
 ## Front-end | Initialisation du projet
 
 - Cloner le dépot [Github du projet](https://github.com/JimmyDef/Projet-ArgentBank)
-- Intaller les dépendances **npm install**
+- Installer les dépendances **npm install**
 - Lancer le Front-end **npm run dev**
 
 ## Phase 1

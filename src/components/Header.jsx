@@ -14,9 +14,9 @@ const Header = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user);
 
-  // --------------------------
-  //Fonction déconnexion, nettoyage du store et du localStorage, retour page de connexion.
-  // --------------------------
+  /*----------------------------------
+  Fonction déconnexion, nettoyage du store et du localStorage, retour page de connexion.
+------------------------------------*/
 
   const handleSignOut = () => {
     dispatch(clearUserInfos());

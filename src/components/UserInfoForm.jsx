@@ -21,11 +21,11 @@ const UserInfoForm = ({ setIsEditModeActive }) => {
 
   const [updateProfile, { isError, isLoading }] = useUpdateProfileMutation();
 
-  // --------------------------
-  // Fonction submit formulaire et vérification des champs de données:
-  //  - Si aucun champs renseigné => notification visuel
-  //  - Si OK : => push dataBase + redux
-  // --------------------------
+  /*----------------------------------
+   Fonction submit formulaire et vérification des champs de données:
+    - Si aucun champs renseigné => notification visuel
+    - Si OK : => push dataBase + redux
+  ------------------------------------*/
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -35,12 +35,12 @@ const UserInfoForm = ({ setIsEditModeActive }) => {
     submitProfileUpdate();
   };
 
-  // --------------------------
-  // Fonction mise à jour profil utilisateur:  Fetch API + état Redux.
-  // Si Fetch OK => update du store et fermeture du form.
-  // Si erreur Authentification => Nettoyage du localStorage et du store, retour page log-in.
-  // Si serveur distant inaccessible => notification visuel via isError fourni par RTK query.
-  // --------------------------
+  /*----------------------------------
+   Fonction mise à jour profil utilisateur:  Fetch API + état Redux.
+   Si Fetch OK => update du store et fermeture du form.
+   Si erreur Authentification => Nettoyage du localStorage et du store, retour page log-in.
+   Si serveur distant inaccessible => notification visuel via isError fourni par RTK query.
+ ------------------------------------*/
 
   const submitProfileUpdate = async () => {
     const updatedUserData = {
@@ -68,9 +68,9 @@ const UserInfoForm = ({ setIsEditModeActive }) => {
     }
   };
 
-  // --------------------------
-  // Fonction gestion des changements dans les champs du formulaire.
-  // --------------------------
+  /*----------------------------------
+  Fonction gestion des changements dans les champs du formulaire.
+  ------------------------------------*/
   const handleChange = (e) => {
     const { id, value } = e.target;
     const cleanedValue = filterNonAlphabeticCharacters(value);
@@ -80,9 +80,9 @@ const UserInfoForm = ({ setIsEditModeActive }) => {
     });
   };
 
-  // --------------------------
-  // Fonction annulation et fermeture du formulaire  nom/prénom
-  // --------------------------
+  /*----------------------------------
+  Fonction annulation et fermeture du formulaire  nom/prénom
+  ------------------------------------*/
   const cancelProfileUpdate = (e) => {
     e.preventDefault();
     setFormData({ ...formData, firstName: "", lastName: "" });

@@ -8,24 +8,24 @@ import { setItemStorage } from "./../utils/modules";
 import { Loader } from "../components/loaders/Loaders";
 import { useSignInMutation } from "../redux/userApi";
 import { removeItemStorage } from "./../utils/modules";
-
+import { filterCharactersForEmail } from "./../utils/modules";
 const Signin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userState = useSelector((state) => state.user);
-  const [signIn, { isLoading, error, isError }] = useSignInMutation();
-  // const [isError, setIsError] = useState(false);
+  const [signIn, { isLoading, error }] = useSignInMutation();
+
   const [formData, setFormData] = useState({
     userName: "",
     password: "",
     isChecked: false,
   });
-  // --------------------------
-  // Fonction pour gérer la soumission du formulaire de connexion
-  // Si fetch OK  => ajout du token au store Redux et redirection page Profile.
-  // Si erreur d'identifiant (error 400) => notification visuel (isError)
-  // Si Serveur indisponible => page 404
-  // --------------------------
+  /* --------------------------
+  Fonction pour gérer la soumission du formulaire de connexion
+  Si fetch OK  => ajout du token au store Redux et redirection page Profile.
+  Si erreur d'identifiant (error 400) => notification visuel (isError)
+  Si Serveur indisponible => page 404
+ -------------------------- */
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -46,9 +46,9 @@ const Signin = () => {
     handleSignIn();
   };
 
-  // --------------------------
-  //Fonction déconnexion, nettoyage du store et du localStorage, retour page de connexion.
-  // --------------------------
+  /*----------------------------------
+  Fonction déconnexion, nettoyage du store et du localStorage, retour page de connexion.
+------------------------------------*/
 
   const handleSignOut = () => {
     dispatch(clearUserInfos());
@@ -56,14 +56,13 @@ const Signin = () => {
     navigate("/sign-in");
   };
 
-  // --------------------------
-  // Fonction gestion de la checkbox "remember me"
-  // --------------------------
+  /*----------------------------------
+  Fonction gestion de la checkbox "remember me"
+------------------------------------*/
   const handleCheckBox = (e) => {
     setFormData({ ...formData, isChecked: e.target.checked });
   };
-  console.log("🚀 ~ main:", error);
-  console.log("🚀 ~ isERROPR:", isError);
+
   return (
     <main className="main bg-dark">
       <section className="sign-in-content">
@@ -85,9 +84,15 @@ const Signin = () => {
                   type="email"
                   id="username"
                   value={formData.userName}
-                  onChange={(e) =>
-                    setFormData({ ...formData, userName: e.target.value })
-                  }
+                  onChange={(e) => {
+                    const sanitizedValue = filterCharactersForEmail(
+                      e.target.value
+                    );
+                    setFormData({
+                      ...formData,
+                      userName: sanitizedValue,
+                    });
+                  }}
                 />
               </div>
               <div

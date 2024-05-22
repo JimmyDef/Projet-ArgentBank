@@ -1,6 +1,6 @@
-// ----------------------------
-// Gestion du local storage
-// ----------------------------
+/* ----------------------------
+ Gestion du local storage
+ ---------------------------- */
 
 export const setItemStorage = (add) => {
   localStorage.setItem("userToken", JSON.stringify(add));
@@ -14,10 +14,10 @@ export const removeItemStorage = () => {
   localStorage.removeItem("userToken");
 };
 
-// ----------------------------
-// Fonction vérification de présence et d'intégrité du token.
-// Un mauvais token dans le localStorage sera écrasé/nettoyé.
-// ----------------------------
+/*  ----------------------------
+ Fonction vérification de présence et d'intégrité du token.
+ Un mauvais token dans le localStorage sera écrasé/nettoyé.
+----------------------------*/
 
 export const isTokenValid = () => {
   const userToken = localStorage.getItem("userToken");
@@ -42,10 +42,18 @@ export const isTokenValid = () => {
   }
 };
 
-// ----------------------------------------------------
-// Fonction echappement caractères non-alphabetique (tiret autorisé)
-// ----------------------------------------------------
+/*  ----------------------------------------------------
+Fonction echappement caractères non-alphabetique (tiret autorisé)
+ ---------------------------------------------------- */
 
 export const filterNonAlphabeticCharacters = (input) => {
-  return input.replace(/[^a-zA-ZÀ-ÖØ-öø-ÿ-'     ]/g, "");
+  return input.replace(/[^a-zA-ZÀ-ÖØ-öø-ÿ-' ]/g, "");
+};
+
+/*  ----------------------------------------------------
+Fonction echappement caractères spéciaux pour adresse  EMAIL
+ ---------------------------------------------------- */
+
+export const filterCharactersForEmail = (input) => {
+  return input.replace(/[^a-zA-Z0-9@._-]/g, "");
 };

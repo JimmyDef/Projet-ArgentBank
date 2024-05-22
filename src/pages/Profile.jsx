@@ -18,8 +18,9 @@ const Profile = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // -----------------
-    // Si pas de token localstorage et pas de token dans redux: retour Sign-IN.
+    /*----------------------------------
+    Si pas de token localstorage et pas de token dans redux: retour Sign-IN.
+    ------------------------------------*/
     if (!isTokenValid() && !userState.token) {
       return navigate("/sign-in");
     }
@@ -27,12 +28,12 @@ const Profile = () => {
     // Si l'utilisateur est authentifié mais les données de profil ne sont pas chargées, récupère les données du profil.
 
     if (userState.token) {
-      // -------------------
-      // Si réponse n'est pas 200 => retour page de connexion.
-      // Si fetch OK => Mise à jour du store Redux et fin du Loader.
-      // Si token du store compromis ou expiré => page connexion.
-      // Si  erreur du serveur => page 404.
-      // -------------------
+      /*----------------------------------
+      Si réponse n'est pas 200 => retour page de connexion.
+      Si fetch OK => Mise à jour du store Redux et fin du Loader.
+      Si token du store compromis ou expiré => page connexion.
+      Si  erreur du serveur => page 404.
+     ----------------------------------*/
       const fetchProfileData = async () => {
         try {
           const response = await getProfile(userState.token).unwrap();

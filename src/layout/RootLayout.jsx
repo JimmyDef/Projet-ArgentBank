@@ -38,18 +38,18 @@ function RootLayout() {
 
       return;
 
-    // ----------------------------
-    // Si Token présent dans le localStorage => Récupération du profile
-    // Si Jeton expired / mal renseigné: retour page log-In.
-    // ----------------------------
+    /*----------------------------------
+     Si Token présent dans le localStorage => Récupération du profile
+     Si Jeton expired / mal renseigné: retour page log-In.
+ ------------------------------------*/
 
     const userToken = getItemStorage();
 
-    // ----------------------------
-    // Fonction Tentative de fetch à l'aide du token localStorage.
-    // Si OK => On nourrie le store redux  avec les infos utilisateurs.
-    // Si jeton compromis/expiré => Nettoyage du localStorage et du store.
-    // ----------------------------
+    /*----------------------------------
+     Fonction Tentative de fetch à l'aide du token localStorage.
+     Si OK => On nourrie le store redux  avec les infos utilisateurs.
+     Si jeton compromis/expiré => Nettoyage du localStorage et du store.
+  ------------------------------------*/
 
     const fetchProfileData = async () => {
       try {

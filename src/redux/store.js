@@ -1,9 +1,9 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
 import { userApi } from "./userApi";
 
-// --------------------------
-// Définition des actions pour gérer l'état du store redux.
-// --------------------------
+/* --------------------------
+Définition des actions pour gérer l'état du store redux.
+-------------------------- */
 
 const userSlice = createSlice({
   name: "user",
@@ -27,9 +27,9 @@ const userSlice = createSlice({
   },
 });
 
-// --------------------------
-// Configuration du store et ajout du middleWare pour la gestion des call API de RTK Query.
-// --------------------------
+/* --------------------------
+Configuration du store et ajout  du middleWare pour la gestion des call API de RTK Query.
+-------------------------- */
 
 export const store = configureStore({
   reducer: { [userApi.reducerPath]: userApi.reducer, user: userSlice.reducer },
